@@ -1,19 +1,24 @@
-import { HANDLER_IDS } from '../constants/handlerIds.js';
+import { PacketType } from '../constants/header.js';
 
-const handlers = {};
-
-export const getHandlerById = (handlerId) => {
-  if (!handlers[handlerId]) {
-    throw Error();
-  }
-
-  return handlers[handlerId].handler;
+const handlers = {
+  [PacketType.REGISTER_REQUEST]: {
+    handler: registerHandler,
+    protoType: 'protoPacket.C2SRegisterRequest',
+  },
 };
 
-export const getProtoTypeNameByHandlerId = (handlerId) => {
-  if (!handlers[handlerId]) {
+export const getHandlerById = (packetType) => {
+  if (!handlers[packetType]) {
     throw Error();
   }
 
-  return handlers[handlerId].protoType;
+  return handlers[packetType].handler;
+};
+
+export const getProtoTypeNameByHandlerId = (packetType) => {
+  if (!handlers[packetType]) {
+    throw Error();
+  }
+
+  return handlers[packetType].protoType;
 };

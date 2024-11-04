@@ -2,24 +2,8 @@ import { CLIENT_VERSION } from '../../constants/env.js';
 import { getProtoTypeNameByHandlerId } from '../../handlers/index.js';
 import { getProtoMessages } from '../../init/loadProto.js';
 
-export const packetParser = (data) => {
+export const packetParser = (handlerId, data) => {
   const protoMessages = getProtoMessages();
-
-  const commonPacket = protoMessages.common.Packet;
-  let packet;
-  try {
-    packet = commonPacket.decode(data);
-  } catch (err) {
-    console.error(err);
-  }
-
-  const handlerId = packet.handlerId;
-  const userId = packet.userId;
-  const clientVersion = packet.version;
-
-  if (clientVersion !== CLIENT_VERSION) {
-    throw Error('클라이언트 버전 불일치');
-  }
 
   const protoTypeName = getProtoTypeNameByHandlerId(handlerId);
   if (!protoTypeName) {
@@ -31,7 +15,7 @@ export const packetParser = (data) => {
   let payload;
 
   try {
-    payload = payloadType.decode(packet.payload);
+    payload = payloadType.decode(data);
   } catch (err) {
     console.error(err);
   }
@@ -44,5 +28,6 @@ export const packetParser = (data) => {
     throw Error();
   }
 
-  return { handlerId, userId, payload };
+  // return { handlerId, userId, payload };
+  return payload;
 };

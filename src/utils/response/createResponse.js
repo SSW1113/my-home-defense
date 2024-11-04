@@ -3,13 +3,12 @@ import {
   VERSION_LENGTH,
   SEQUENCE_LENGTH,
   PAYLOAD_LENGTH,
+  PacketType,
 } from '../../constants/header.js';
 import { getProtoMessages } from '../../init/loadProto.js';
+import { getNextSequence } from '../../sessions/user.session.js';
 
 export const createHeader = (packetType, sequence, payloadLength) => {
-  // const protoMessages = getProtoMessages();
-  // const Response = protoMessages.response.Response;
-
   // 헤더 생성
   // packet type
   const packetType = Buffer.alloc(PACKET_TYPE_LENGTH);
@@ -40,15 +39,21 @@ export const createHeader = (packetType, sequence, payloadLength) => {
  * @param {GlobalFailCode} failCode
  * @returns
  */
-// export const createS2CRegisterResponse = (success, message, failCode) => {
-//   const protoMessages = getProtoMessages();
+export const createS2CRegisterResponse = (userId, payloadLength, success, message, failCode) => {
+  const protoMessages = getProtoMessages();
+  const Response = protoMessages.response.S2CRegisterResponse;
 
-//   const Response = protoMessages.response.S2CRegisterResponse;
+  // response 프로토파일로 정의한 구조에 맞게 작성합니다.
+  const response = {
+    success,
+    message,
+    failCode,
+  };
 
-//   // response 프로토파일로 정의한 구조에 맞게 작성합니다.
-//   const response = {
-//     success,
-//     message,
-//     failCode,
-//   };
-// };
+  const sequence = getNextSequence(userId);
+  const buffer = Response.encode(response).finish();
+
+  const headerPacket = createHeader(PacketType.REGISTER_RESPONSE, sequence, payloadLength);
+
+  return Buffer.concat([headerPacket, buffer]);
+};
