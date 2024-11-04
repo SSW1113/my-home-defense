@@ -1,6 +1,6 @@
 import { createS2CRegisterResponse } from '../../utils/response/createResponse.js';
 
-export const registerHandler = async ({ socket, userId, payload }) => {
+export const registerHandler = async ({ packetType, payload, socket }) => {
   try {
     const { id, password, email } = payload;
 
