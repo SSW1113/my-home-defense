@@ -45,8 +45,12 @@ export const registerHandler = async ({ packetType, data, socket }) => {
         messages: '이미 가입된 유저입니다.',
         failCode: config.globalFailCode.INVALID_REQUEST,
       };
-      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseName, responseData);
-
+      registerResponse = createResponse(
+        id,
+        PacketType.REGISTER_RESPONSE,
+        responseType,
+        responseData,
+      );
     } else {
       // db 저장
       await createUser(id, hashedPassword, email);
@@ -55,8 +59,13 @@ export const registerHandler = async ({ packetType, data, socket }) => {
         success: true,
         messages: '회원가입이 완료되었습니다.',
         failCode: config.globalFailCode.NONE,
-      }
-      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseName, responseData);
+      };
+      registerResponse = createResponse(
+        id,
+        PacketType.REGISTER_RESPONSE,
+        responseType,
+        responseData,
+      );
       // registerResponse = createS2CRegisterResponse(
       //   id,
       //   true,
@@ -68,6 +77,7 @@ export const registerHandler = async ({ packetType, data, socket }) => {
   } catch (e) {
     // 추가로 핸들러 에러처리해야됨 기억해
     // handlerError(socket, e);
+    console;
   }
 };
 

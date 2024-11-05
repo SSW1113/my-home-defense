@@ -3,32 +3,36 @@ import { getNextSequence } from '../../sessions/user.session.js';
 import { createHeader } from './createHeader.js';
 
 /**
- * 
+ *
  * @param {*} userId  시퀀스를 위한 userId
  * @param {*} packetType 헤더에 들어갈 packetType
  * @param {*} responseType 응답 프로토콜 버퍼 이름
  * @param {*} responseData 응답 데이터
- * @returns 
+ * @returns
  */
-export const createResponse = (userId, packetType, responseType, responseName, responseData) => {
-    try {
-        const protoMessages = getProtoMessages();
-        const gamePacket = protoMessages['protoPacket']['GamePacket'];
+export const createResponse = (userId, packetType, responseType, responseData) => {
+  try {
+    const protoMessages = getProtoMessages();
+    const gamePacket = protoMessages['protoPacket']['GamePacket'];
 
-        const response = protoMessages.response[responseType];
+    const responsePayload = Object.keys(gamePacket.fields).find(
+      (type) => gamePacket.fields[type].type === responseType,
+    );
 
-        const responseInstance = response.create(responseData);
+    const response = protoMessages.response[responseType];
 
-        // 제일 쉬운 방법: 이름도 매개변수로 받는다 << 1도 안섹시함
-        const gamePacketInstance = gamePacket.create({ [responseName]: responseInstance });
+    const responseInstance = response.create(responseData);
 
-        const sequence = getNextSequence(userId);
-        const buffer = gamePacket.encode(gamePacketInstance).finish();
+    // 제일 쉬운 방법: 이름도 매개변수회원가이로 받는다 << 1도 안섹시함
+    const gamePacketInstance = gamePacket.create({ [responsePayload]: responseInstance });
 
-        const headerPacket = createHeader(packetType, sequence, buffer.length);
+    const sequence = getNextSequence(userId);
+    const buffer = gamePacket.encode(gamePacketInstance).finish();
 
-        return Buffer.concat([headerPacket, buffer]);
-    } catch (e) {
-        console.error(e);
-    }
+    const headerPacket = createHeader(packetType, sequence, buffer.length);
+
+    return Buffer.concat([headerPacket, buffer]);
+  } catch (e) {
+    console.error(e);
+  }
 };
