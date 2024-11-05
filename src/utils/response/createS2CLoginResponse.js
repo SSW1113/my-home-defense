@@ -10,29 +10,28 @@ import { createHeader } from './createHeader.js';
  * @param {GlobalFailCode} failCode
  * @returns
  */
-export const createS2CRegisterResponse = (userId, success, message, failCode) => {
+export const createS2CLoginResponse = (userId, success, message, token, failCode) => {
   try {
     const protoMessages = getProtoMessages();
     const GamePacket = protoMessages['protoPacket']['GamePacket'];
-    const Response = protoMessages.response.S2CRegisterResponse;
-    const registerResponse = Response.create({
+    const Response = protoMessages.response.S2CLoginResponse;
+    const loginResponse = Response.create({
       success,
       message,
+      token,
       failCode,
     });
 
-    console.log('success: ', success);
-    console.log('message: ', message);
-    console.log('failCode: ', failCode);
+    console.log('loginResponse: ', loginResponse);
 
     const gamePacket = GamePacket.create({
-      registerResponse,
+      loginResponse,
     });
 
     const sequence = getNextSequence(userId);
     const buffer = GamePacket.encode(gamePacket).finish();
 
-    const headerPacket = createHeader(PacketType.REGISTER_RESPONSE, sequence, buffer.length);
+    const headerPacket = createHeader(PacketType.LOGIN_RESPONSE, sequence, buffer.length);
 
     return Buffer.concat([headerPacket, buffer]);
   } catch (e) {

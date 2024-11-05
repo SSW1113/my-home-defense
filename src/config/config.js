@@ -1,4 +1,11 @@
-import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER } from '../constants/env.js';
+import {
+  DB_HOST,
+  DB_NAME,
+  DB_PASSWORD,
+  DB_PORT,
+  DB_USER,
+  JWT_SECRET_KEY,
+} from '../constants/env.js';
 
 export const config = {
   database: {
@@ -13,5 +20,9 @@ export const config = {
     UNKNOWN_ERROR: 1,
     INVALID_REQUEST: 2,
     AUTHENTICATION_FAILED: 3,
+  },
+  jwt: {
+    secret: JWT_SECRET_KEY,
+    expiresIn: '24h',
   },
 };
