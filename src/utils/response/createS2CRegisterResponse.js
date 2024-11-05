@@ -14,7 +14,7 @@ export const createS2CRegisterResponse = (userId, success, message, failCode) =>
     const protoMessages = getProtoMessages();
     const GamePacket = protoMessages['protoPacket']['GamePacket'];
     const Response = protoMessages.response.S2CRegisterResponse;
-    console.log('GamePacket', GamePacket);
+
     const registerResponse = Response.create({
       success,
       message,

@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import joi from 'joi';
 import { createUser, findUserById } from '../../db/users/user.db.js';
 import { config } from '../../config/config.js';
+import { createResponse } from '../../utils/response/createRespose.js';
+import { PacketType } from '../../constants/header.js';
 
 const schema = joi.object({
   id: joi.string().required().messages({
@@ -35,24 +37,33 @@ export const registerHandler = async ({ packetType, data, socket }) => {
 
     if (user) {
       // 회원가입 response에는 id가 안들어가요
-      registerResponse = createS2CRegisterResponse(
-        id,
-        false,
-        '이미 가입된 유저입니다.',
-        config.globalFailCode.INVALID_REQUEST,
-      ); // 이런식으로 응답 만들기?
+      const responseType = 'S2CRegisterResponse'
+      const responseData = {
+        success: false,
+        messages: '이미 가입된 유저.',
+        failCode: config.globalFailCode.INVALID_REQUEST,
+      }
+      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseData); // 이런식으로 응답 만들기?
+      console.log('이미 가입된 회원', responseData);
     } else {
       // db 저장
       await createUser(id, hashedPassword, email);
       // 아무 이상없이 회원가입이 성공일때
-      registerResponse = createS2CRegisterResponse(
-        id,
-        true,
-        '회원가입이 완료 되었습니다.',
-        config.globalFailCode.NONE,
-      );
+      const responseType = 'S2CRegisterResponse'
+      const responseData = {
+        success: true,
+        messages: '회원가입이 완료.',
+        failCode: config.globalFailCode.NONE,
+      }
+      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseData);
+      // registerResponse = createS2CRegisterResponse(
+      //   id,
+      //   true,
+      //   '회원가입이 완료 되었습니다.',
+      //   config.globalFailCode.NONE,
+      // );
+      console.log('새로운 회원', responseData);
     }
-
     socket.write(registerResponse);
   } catch (e) {
     // 추가로 핸들러 에러처리해야됨 기억해
