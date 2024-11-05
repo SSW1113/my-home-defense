@@ -13,16 +13,16 @@ import { createHeader } from './createHeader.js';
 export const createResponse = (userId, packetType, responseType, responseData) => {
     try {
         const protoMessages = getProtoMessages();
-        const gamePacket = protoMessages['protoPacket']['GamePacket'];
+        const GamePacket = protoMessages['protoPacket']['GamePacket'];
 
-        const response = protoMessages.response[responseType];
+        const Response = protoMessages.response[responseType];
 
-        const responseInstance = response.create(responseData);
+        const registerResponse = Response.create(responseData);
 
-        const gamePacketInstance = gamePacket.create({ responseInstance });
+        const gamePacket = GamePacket.create({ registerResponse });
 
         const sequence = getNextSequence(userId);
-        const buffer = GamePacket.encode(gamePacketInstance).finish();
+        const buffer = GamePacket.encode(gamePacket).finish();
 
         const headerPacket = createHeader(packetType, sequence, buffer.length);
 
