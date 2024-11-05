@@ -1,1 +1,3 @@
-export const onEnd = (socket) => () => {};
+export const onEnd = (socket) => () => {
+  console.log('user disconnect');
+};

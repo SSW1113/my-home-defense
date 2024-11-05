@@ -1,3 +1,4 @@
+import { CLIENT_VERSION } from '../../constants/env.js';
 import {
   PACKET_TYPE_LENGTH,
   VERSION_LENGTH,
@@ -11,8 +12,8 @@ import { getNextSequence } from '../../sessions/user.session.js';
 export const createHeader = (packetType, sequence, payloadLength) => {
   // 헤더 생성
   // packet type
-  const packetType = Buffer.alloc(PACKET_TYPE_LENGTH);
-  packetType.writeUInt16BE(packetType);
+  const packetTypeBuffer = Buffer.alloc(PACKET_TYPE_LENGTH); // 이름 겹침
+  packetTypeBuffer.writeUInt16BE(packetType);
 
   // version
   const versionBuffer = Buffer.from(CLIENT_VERSION, 'utf8');
@@ -26,10 +27,16 @@ export const createHeader = (packetType, sequence, payloadLength) => {
   sequenceBuffer.writeUint32BE(sequence); // 어짜피 숫자라 직렬화 필요 없음 (라고함)
 
   // payload length
-  const payloadLength = Buffer.alloc(PAYLOAD_LENGTH);
-  payloadLength.writeUInt32BE(payloadLength);
+  const payloadLengthBuffer = Buffer.alloc(PAYLOAD_LENGTH); // 이름 겹침
+  payloadLengthBuffer.writeUInt32BE(payloadLength);
 
-  return Buffer.concat([packetType, versionLength, versionBuffer, sequenceBuffer, payloadLength]);
+  return Buffer.concat([
+    packetTypeBuffer,
+    versionLength,
+    versionBuffer,
+    sequenceBuffer,
+    payloadLengthBuffer,
+  ]);
 };
 
 /**
@@ -39,21 +46,33 @@ export const createHeader = (packetType, sequence, payloadLength) => {
  * @param {GlobalFailCode} failCode
  * @returns
  */
-export const createS2CRegisterResponse = (userId, payloadLength, success, message, failCode) => {
-  const protoMessages = getProtoMessages();
-  const Response = protoMessages.response.S2CRegisterResponse;
+export const createS2CRegisterResponse = (userId, success, message, failCode) => {
+  try {
+    const protoMessages = getProtoMessages();
+    const GamePacket = protoMessages['protoPacket']['GamePacket'];
+    const Response = protoMessages.response.S2CRegisterResponse;
+    console.log('GamePacket', GamePacket);
+    const registerResponse = Response.create({
+      success,
+      message,
+      failCode,
+    });
 
-  // response 프로토파일로 정의한 구조에 맞게 작성합니다.
-  const response = {
-    success,
-    message,
-    failCode,
-  };
+    console.log('success: ', success);
+    console.log('message: ', message);
+    console.log('failCode: ', failCode);
 
-  const sequence = getNextSequence(userId);
-  const buffer = Response.encode(response).finish();
+    const gamePacket = GamePacket.create({
+      registerResponse,
+    });
 
-  const headerPacket = createHeader(PacketType.REGISTER_RESPONSE, sequence, payloadLength);
+    const sequence = getNextSequence(userId);
+    const buffer = GamePacket.encode(gamePacket).finish();
 
-  return Buffer.concat([headerPacket, buffer]);
+    const headerPacket = createHeader(PacketType.REGISTER_RESPONSE, sequence, buffer.length);
+
+    return Buffer.concat([headerPacket, buffer]);
+  } catch (e) {
+    console.error(e);
+  }
 };

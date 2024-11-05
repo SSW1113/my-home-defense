@@ -9,3 +9,5 @@ class User {
     return ++this.sequence;
   }
 }
+
+export default User;

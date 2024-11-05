@@ -1,4 +1,4 @@
-import Game from '../class/models/game.class.js';
+import Game from '../classes/models/game.class.js';
 import { gameSessions } from './sessions.js';
 
 export const addGameSession = (id) => {

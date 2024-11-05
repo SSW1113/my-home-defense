@@ -1,4 +1,4 @@
-import User from '../class/models/user.class.js';
+import User from '../classes/models/user.class.js';
 import { userSessions } from './sessions.js';
 
 export const addUser = (socket, id, playerId, latency) => {

@@ -25,6 +25,8 @@ const createPool = () => {
   return pool;
 };
 
-const dbPool = createPool();
+const dbPool = {
+  USERS_DB: createPool(),
+};
 
 export default dbPool;
