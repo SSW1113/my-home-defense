@@ -35,34 +35,34 @@ export const registerHandler = async ({ packetType, data, socket }) => {
     const user = await findUserById(id);
     console.log('user: ', user);
 
+    const responseType = 'S2CRegisterResponse';
+    const responseName = 'registerResponse';
+
     if (user) {
       // 회원가입 response에는 id가 안들어가요
-      const responseType = 'S2CRegisterResponse'
       const responseData = {
         success: false,
-        messages: '이미 가입된 유저.',
+        messages: '이미 가입된 유저입니다.',
         failCode: config.globalFailCode.INVALID_REQUEST,
-      }
-      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseData); // 이런식으로 응답 만들기?
-      console.log('이미 가입된 회원', responseData);
+      };
+      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseName, responseData);
+
     } else {
       // db 저장
       await createUser(id, hashedPassword, email);
       // 아무 이상없이 회원가입이 성공일때
-      const responseType = 'S2CRegisterResponse'
       const responseData = {
         success: true,
-        messages: '회원가입이 완료.',
+        messages: '회원가입이 완료되었습니다.',
         failCode: config.globalFailCode.NONE,
       }
-      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseData);
+      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseType, responseName, responseData);
       // registerResponse = createS2CRegisterResponse(
       //   id,
       //   true,
       //   '회원가입이 완료 되었습니다.',
       //   config.globalFailCode.NONE,
       // );
-      console.log('새로운 회원', responseData);
     }
     socket.write(registerResponse);
   } catch (e) {

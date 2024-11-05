@@ -10,7 +10,7 @@ import { createHeader } from './createHeader.js';
  * @param {*} responseData 응답 데이터
  * @returns 
  */
-export const createResponse = (userId, packetType, responseType, responseData) => {
+export const createResponse = (userId, packetType, responseType, responseName, responseData) => {
     try {
         const protoMessages = getProtoMessages();
         const gamePacket = protoMessages['protoPacket']['GamePacket'];
@@ -19,7 +19,8 @@ export const createResponse = (userId, packetType, responseType, responseData) =
 
         const responseInstance = response.create(responseData);
 
-        const gamePacketInstance = gamePacket.create({ responseInstance });
+        // 제일 쉬운 방법: 이름도 매개변수로 받는다 << 1도 안섹시함
+        const gamePacketInstance = gamePacket.create({ [responseName]: responseInstance });
 
         const sequence = getNextSequence(userId);
         const buffer = gamePacket.encode(gamePacketInstance).finish();
