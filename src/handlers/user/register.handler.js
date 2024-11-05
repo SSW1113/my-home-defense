@@ -1,4 +1,4 @@
-import { createS2CRegisterResponse } from '../../utils/response/createResponse.js';
+import { createS2CRegisterResponse } from '../../utils/response/createS2CRegisterResponse.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import joi from 'joi';
@@ -32,6 +32,7 @@ export const registerHandler = async ({ packetType, data, socket }) => {
     // db에 이미 유저가 있는지 확인
     const user = await findUserById(id);
     console.log('user: ', user);
+
     if (user) {
       // 회원가입 response에는 id가 안들어가요
       registerResponse = createS2CRegisterResponse(
@@ -51,6 +52,7 @@ export const registerHandler = async ({ packetType, data, socket }) => {
         config.globalFailCode.NONE,
       );
     }
+
     socket.write(registerResponse);
   } catch (e) {
     // 추가로 핸들러 에러처리해야됨 기억해

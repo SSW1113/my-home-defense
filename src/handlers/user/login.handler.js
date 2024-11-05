@@ -1,7 +1,6 @@
 import { HANDLER_IDS, RESPONSE_SUCCESS_CODE } from '../../constants/handlerId.js';
 import { findUserById, updateUserLogin } from '../../db/users/user.db.js';
 import { addUser } from '../../sessions/user.session.js';
-import { createHeader, createS2CRegisterResponse } from '../../utils/response/createResponse.js';
 
 export const loginHandler = async ({ packetType, data, socket }) => {
   try {
