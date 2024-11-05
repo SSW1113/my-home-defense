@@ -1,4 +1,7 @@
 export const packetNames = {
+  protoPacket: {
+    GamePacket: 'protoPacket.GamePacket',
+  },
   gameNotification: {
     S2CMatchStartNotification: 'protoPacket.S2CMatchStartNotification',
     S2CAddEnemyTowerNotification: 'protoPacket.S2CAddEnemyTowerNotification',
