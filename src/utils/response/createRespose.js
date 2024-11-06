@@ -16,6 +16,7 @@ export const createResponse = (userId, packetType, responseData) => {
     const protoMessages = getProtoMessages();
     const gamePacket = protoMessages['protoPacket']['GamePacket'];
 
+    // 따로 저장한 responseProto에서 protoType을 가져옴
     const [namespace, typeName] = responseProto[packetType].protoType.split('.');
     const response = protoMessages[namespace][typeName];
 
@@ -27,10 +28,9 @@ export const createResponse = (userId, packetType, responseData) => {
     // );
 
     const gamePacketFieldName = responseProto[packetType].fieldName;
-    // 제일 쉬운 방법: 이름도 매개변수회원가이로 받는다 << 1도 안섹시함
     const gamePacketInstance = gamePacket.create({ [gamePacketFieldName]: responseInstance });
 
-    const sequence = getNextSequence(userId);
+    const sequence = 0;
     const buffer = gamePacket.encode(gamePacketInstance).finish();
 
     const headerPacket = createHeader(packetType, sequence, buffer.length);

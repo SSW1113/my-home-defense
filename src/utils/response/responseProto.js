@@ -5,4 +5,8 @@ export const responseProto = {
     protoType: 'response.S2CRegisterResponse',
     fieldName: 'registerResponse',
   },
+  [PacketType.LOGIN_RESPONSE]: {
+    protoType: 'response.S2CLoginResponse',
+    fieldName: 'loginResponse',
+  },
 };

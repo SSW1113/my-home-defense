@@ -1,5 +1,3 @@
-import { createS2CRegisterResponse } from '../../utils/response/createS2CRegisterResponse.js';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import joi from 'joi';
 import { createUser, findUserById } from '../../db/users/user.db.js';
