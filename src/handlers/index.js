@@ -1,7 +1,8 @@
 import { PacketType } from '../constants/header.js';
 import { registerHandler } from './user/register.handler.js';
 import { loginHandler } from './user/login.handler.js';
-import { spawnMonsterRequestHandler } from './game/spawMonster.handler.js';
+import { spawnMonsterHandler } from './game/spawMonster.handler.js';
+import { monsterDeathNotifyHandler } from './game/monsterDeath.handler.js';
 
 const handlers = {
   [PacketType.REGISTER_REQUEST]: {
@@ -13,8 +14,12 @@ const handlers = {
     protoType: 'request.C2SLoginRequest',
   },
   [PacketType.SPAWN_MONSTER_REQUEST]: {
-    handler: spawnMonsterRequestHandler,
+    handler: spawnMonsterHandler,
     protoType: 'request.C2SSpawnMonsterRequest',
+  },
+  [PacketType.MONSTER_DEATH_NOTIFICATION]: {
+    handler: monsterDeathNotifyHandler,
+    protoType: 'request.C2SMonsterDeathNotification',
   },
 };
 

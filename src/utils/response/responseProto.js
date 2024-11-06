@@ -17,4 +17,8 @@ export const responseProto = {
     protoType: 'response.S2CSpawnEnemyMonsterNotification',
     fieldName: 'spawnEnemyMonsterNotification',
   },
+  [PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION]: {
+    protoType: 'response.S2CEnemyMonsterDeathNotification',
+    fieldName: 'enemyMonsterDeathNotification',
+  },
 };

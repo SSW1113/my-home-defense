@@ -19,9 +19,8 @@ class User {
     return monster;
   }
 
-  // 이거는 클라이언트 C2SMonsterDeathNotification 이 요청이 왔을떄 실행하면 될것 같다.
   /**
-   * 해당 몬스터 삭제
+   * 몬스터 삭제
    * @param {int} monsterId 클라이언트에서 받은 monsterId 넣어주기
    * @returns
    */
