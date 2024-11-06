@@ -4,7 +4,6 @@ import {
   VERSION_LENGTH,
   SEQUENCE_LENGTH,
   PAYLOAD_LENGTH,
-  PacketType,
 } from '../../constants/header.js';
 
 export const createHeader = (packetType, sequence, payloadLength) => {

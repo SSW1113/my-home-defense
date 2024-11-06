@@ -3,7 +3,6 @@ import {
   VERSION_LENGTH,
   SEQUENCE_LENGTH,
   PAYLOAD_LENGTH,
-  PacketType,
 } from '../constants/header.js';
 import { getHandlerById } from '../handlers/index.js';
 import { packetParser } from '../utils/parser/packetParser.js';
