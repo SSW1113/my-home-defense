@@ -23,44 +23,45 @@ export const registerHandler = async ({ packetType, data, socket }) => {
     const { id, password, email } = await schema.validateAsync(data);
     console.log('data: ', data);
 
-    // 유효성 검사
-
     // 비밀 번호 암호화
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    let registerResponse;
     // db에 이미 유저가 있는지 확인
     const user = await findUserById(id);
     console.log('user: ', user);
 
+    let responseData;
     if (user) {
-      // 회원가입 response에는 id가 안들어가요
-      const responseData = {
+      // id가 같은 유저가 이미 존재할 때
+      responseData = {
         success: false,
         messages: '이미 가입된 유저입니다.',
         failCode: config.globalFailCode.INVALID_REQUEST,
       };
-      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseData);
     } else {
       // db 저장
       await createUser(id, hashedPassword, email);
+
       // 아무 이상없이 회원가입이 성공일때
-      const responseData = {
+      responseData = {
         success: true,
         messages: '회원가입이 완료되었습니다.',
         failCode: config.globalFailCode.NONE,
       };
-      registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseData);
     }
 
-    console.log('register complete');
+    const registerResponse = createResponse(id, PacketType.REGISTER_RESPONSE, responseData);
+
     socket.write(registerResponse);
+    console.log('register complete');
   } catch (e) {
     // 추가로 핸들러 에러처리해야됨 기억해
     console.error(e);
+    const errorResponse = {
+      success: false,
+      message: '회원가입 처리 중 예상치 못한 오류가 발생했습니다.',
+      failCode: config.globalFailCode.UNKNOWN_ERROR,
+    };
+    socket.write(createResponse(id, PacketType.REGISTER_RESPONSE, errorResponse));
   }
 };
-
-// bool success = 1;
-// string message = 2;
-// GlobalFailCode failCode = 3;
