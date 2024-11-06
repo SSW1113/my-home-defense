@@ -12,7 +12,7 @@ class Monster {
   }
 
   getMonsterNumber() {
-    const munsterNum = Math.floor(Math.random() * 4) + 1;
+    const munsterNum = Math.floor(Math.random() * 5) + 1; // 몬스터 5마리네요
     return munsterNum;
   }
 }
