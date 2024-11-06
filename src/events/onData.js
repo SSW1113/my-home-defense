@@ -1,3 +1,4 @@
+import { CLIENT_VERSION } from '../constants/env.js';
 import {
   PACKET_TYPE_LENGTH,
   VERSION_LENGTH,
@@ -28,11 +29,16 @@ export const onData = (socket) => async (data) => {
         PACKET_TYPE_LENGTH + VERSION_LENGTH,
         PACKET_TYPE_LENGTH + VERSION_LENGTH + versionLength,
       );
+      // 버전 체크
+      if (version !== CLIENT_VERSION) {
+        throw new Error('클라이언트 버전이 일치하지 않습니다.');
+      }
 
       // 시퀀스
       const sequence = socket.buffer.readUInt32BE(
         PACKET_TYPE_LENGTH + VERSION_LENGTH + versionLength,
       );
+      // 시퀀스 체크 TODO
 
       // 페이로드 길이
       const payloadLength = socket.buffer.readUInt32BE(

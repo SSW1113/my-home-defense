@@ -1,16 +1,20 @@
 import { PacketType } from '../constants/header.js';
 import { registerHandler } from './user/register.handler.js';
 import { loginHandler } from './user/login.handler.js';
+import { spawnMonsterRequestHandler } from './game/spawMonster.handler.js';
 
 const handlers = {
   [PacketType.REGISTER_REQUEST]: {
     handler: registerHandler,
-    // protoType: 'request.registerRequest.C2SRegisterRequest',
     protoType: 'request.C2SRegisterRequest',
   },
   [PacketType.LOGIN_REQUEST]: {
     handler: loginHandler,
     protoType: 'request.C2SLoginRequest',
+  },
+  [PacketType.SPAWN_MONSTER_REQUEST]: {
+    handler: spawnMonsterRequestHandler,
+    protoType: 'request.C2SSpawnMonsterRequest',
   },
 };
 
