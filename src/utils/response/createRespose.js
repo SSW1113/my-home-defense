@@ -1,5 +1,4 @@
 import { getProtoMessages } from '../../init/loadProto.js';
-import { getNextSequence } from '../../sessions/user.session.js';
 import { createHeader } from './createHeader.js';
 import { responseProto } from './responseProto.js';
 
@@ -11,7 +10,7 @@ import { responseProto } from './responseProto.js';
  * @param {*} responseData 응답 데이터
  * @returns
  */
-export const createResponse = (userId, packetType, responseData) => {
+export const createResponse = (packetType, responseData) => {
   try {
     const protoMessages = getProtoMessages();
     const gamePacket = protoMessages['protoPacket']['GamePacket'];
