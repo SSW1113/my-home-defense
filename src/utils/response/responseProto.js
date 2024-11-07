@@ -9,4 +9,8 @@ export const responseProto = {
     protoType: 'response.S2CLoginResponse',
     fieldName: 'loginResponse',
   },
+  [PacketType.TOWER_PURCHASE_RESPONSE]: {
+    protoType: 'response.S2CTowerPurchaseResponse',
+    fieldName: 'towerPurchaseResponse',
+  },
 };
