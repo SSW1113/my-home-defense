@@ -29,22 +29,19 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
 
   // 게임 종료
   if (baseHp <= 0) {
-    gameEnd(socket, gameSession);
+    // 게임 종료 notification 전송 (패배)
+    const gameOverNotification = createGameOverNotification(false);
+    socket.write(gameOverNotification);
+
+    // 적들에게 게임 종료 notification 생성 및 전송 (승리)
+    const opponentgameOverNotification = createGameOverNotification(true);
+    const opponentUsers = gameSession.getOpponentUser(user.id);
+    opponentUsers.forEach((user) => {
+      user.socket.write(opponentgameOverNotification);
+    });
+
     removeGamesession(user.gameSession.id);
   }
-};
-
-const gameEnd = (socket, gameSession) => {
-  // 게임 종료 notification 생성 및 전송
-  const gameOverNotification = createGameOverNotification(false);
-  socket.write(gameOverNotification);
-
-  // 적들에게 게임 종료 notification 생성 및 전송
-  const opponentgameOverNotification = createGameOverNotification(true);
-  const opponentUsers = gameSession.getOpponentUser(user.id);
-  opponentUsers.forEach((user) => {
-    user.socket.write(opponentgameOverNotification);
-  });
 };
 
 export const gameOverHandler = async ({ packetType, data, socket }) => {
