@@ -33,13 +33,6 @@ export const makeNotification = (packetType, data) => {
   }
 };
 
-/*
-message S2CMatchStartNotification {
-    InitialGameState initialGameState = 1;
-    GameState playerData = 2;
-    GameState opponentData = 3;
-}
-*/
 export const createMatchStartNotification = () => {
   const initialGameStateData = {
     baseHp: 500,

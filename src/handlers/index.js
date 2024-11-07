@@ -3,11 +3,13 @@ import { registerHandler } from './user/register.handler.js';
 import { loginHandler } from './user/login.handler.js';
 import { towerPurchaseHandler } from './tower/towerPurchase.handler.js';
 import { matchStartHandler } from './game/match.handler.js';
+import { matchStartHandler } from './game/match.handler.js';
+import { spawnMonsterHandler } from './game/spawMonster.handler.js';
+import { monsterDeathNotifyHandler } from './game/monsterDeath.handler.js';
 
 const handlers = {
   [PacketType.REGISTER_REQUEST]: {
     handler: registerHandler,
-    // protoType: 'request.registerRequest.C2SRegisterRequest',
     protoType: 'request.C2SRegisterRequest',
   },
   [PacketType.LOGIN_REQUEST]: {
@@ -21,6 +23,14 @@ const handlers = {
   [PacketType.MATCH_REQUEST]: {
     handler: matchStartHandler,
     protoType: 'request.C2SMatchRequest',
+  },
+  [PacketType.SPAWN_MONSTER_REQUEST]: {
+    handler: spawnMonsterHandler,
+    protoType: 'request.C2SSpawnMonsterRequest',
+  },
+  [PacketType.MONSTER_DEATH_NOTIFICATION]: {
+    handler: monsterDeathNotifyHandler,
+    protoType: 'gameNotification.C2SMonsterDeathNotification',
   },
 };
 

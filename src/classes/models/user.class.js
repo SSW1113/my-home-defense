@@ -6,6 +6,8 @@ class User {
     this.id = id;
     this.sequence = 0;
     this.towers = [];
+    this.monsters = [];
+    this.gameSession;
 
     // 게임 데이터
     this.gold = 500;
@@ -22,19 +24,13 @@ class User {
     };
   }
 
-  /*
-  message GameState {
-    int32 gold = 1;
-    BaseData base = 2;
-    int32 highScore = 3;
-    repeated TowerData towers = 4;
-    repeated MonsterData monsters = 5;
-    int32 monsterLevel = 6;
-    int32 score = 7;
-    repeated Position monsterPath = 8;
-    Position basePosition = 9;
+  setGameSession(gameSession) {
+    this.gameSession = gameSession;
   }
-  */
+
+  getGameSession() {
+    return this.gameSession;
+  }
 
   getNextSequence() {
     return ++this.sequence;
@@ -80,6 +76,32 @@ class User {
     }
 
     return path;
+  }
+
+  createMonster(monster) {
+    this.monsters.push(monster);
+  }
+
+  getMonster(monsterId) {
+    const monster = this.monsters.find((monster) => monster.id === monsterId);
+    return monster;
+  }
+
+  /**
+   * 몬스터 삭제
+   * @param {int} monsterId 클라이언트에서 받은 monsterId 넣어주기
+   * @returns
+   */
+  removeMonster(monsterId) {
+    const index = this.monsters.findIndex((monster) => monster.id === monsterId);
+    return this.monsters.splice(index, 1)[0];
+  }
+
+  /**
+   * 게임 종료 및 여러 상황에서 전체 몬스터 정보 초기화
+   */
+  clearMonster() {
+    this.monsters = [];
   }
 }
 

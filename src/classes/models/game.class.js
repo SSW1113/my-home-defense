@@ -1,4 +1,7 @@
-import { createMatchStartNotification } from "../../utils/notification/game.notification.js";
+import { createMatchStartNotification } from '../../utils/notification/game.notification.js';
+
+import { PacketType } from '../../constants/header.js';
+import { createResponse } from '../../utils/response/createRespose.js';
 
 class Game {
   constructor(id) {
@@ -10,7 +13,7 @@ class Game {
       towerCost: 2,
       initialGold: 3,
       monsterSpawnInterval: 4,
-    }
+    };
   }
 
   addUser(user) {
@@ -22,8 +25,12 @@ class Game {
     }
   }
 
-  getUser(userId) {
+  getUserById(userId) {
     return this.users.find((user) => user.id === userId);
+  }
+
+  getUserBySocket(socket) {
+    return this.users.find((user) => user.socket === socket);
   }
 
   removeUser(socket) {
@@ -45,28 +52,35 @@ class Game {
     user2Socket.write(gameStartPacket);
   }
 
+  // 아마 이게 맞을것 같은데
+  getAllSpawnEnemyMonster(userId) {
+    const user = this.users.find((user) => user.id === userId);
+
+    // 다른 유저의 몬스터 정보를 찾고 전달해주기 // 그러면 일단 각 유저들이 몬스터를 생성한 후에 실행해 줘야 맞겠는데
+    this.users
+      .filter((user) => user.id !== userId)
+      .forEach((otherUser) => {
+        const lastIndex = otherUser.monsters.length - 1;
+        const monsterData = {
+          monsterId: otherUser.monsters[lastIndex].id,
+          monsterNumber: otherUser.monsters[lastIndex].monsterNumber,
+        };
+        const notification = createResponse(
+          PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
+          monsterData,
+        );
+        user.socket.write(notification); // 자기 자신에게 정보 전달
+      });
+  }
+
+  // 이거는 자기 몬스터 상황을 다른 유저들에게 알리는 함수
+  notifyEnemyMonsterDeath(userId, monsterId) {
+    const notification = createResponse(PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION, { monsterId });
+
+    this.users
+      .filter((user) => user.id !== userId)
+      .forEach((otherUser) => otherUser.socket.write(notification)); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
+  }
 }
 
 export default Game;
-
-
-
-// message GameState {
-//   int32 gold = 1;
-//   BaseData base = 2;
-//   int32 highScore = 3;
-//   repeated TowerData towers = 4;
-//   repeated MonsterData monsters = 5;
-//   int32 monsterLevel = 6;
-//   int32 score = 7;
-//   repeated Position monsterPath = 8;
-//   Position basePosition = 9;
-// }
-
-// message InitialGameState {
-//   int32 baseHp = 1;
-//   int32 towerCost = 2;
-//   int32 initialGold = 3;
-//   int32 monsterSpawnInterval = 4;
-// }
-
