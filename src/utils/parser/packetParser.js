@@ -48,6 +48,6 @@ export const packetParser = (packetType, data) => {
     // return { packetType, userId, payload };
     return payload;
   } catch (err) {
-    console.error('error in packet Parsing', err.message);
+    console.error('error in packet Parsing: ', err.message);
   }
 };
