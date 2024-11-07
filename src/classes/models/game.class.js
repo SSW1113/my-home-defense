@@ -1,3 +1,5 @@
+import { createMatchStartNotification } from '../../utils/notification/game.notification.js';
+
 import { PacketType } from '../../constants/header.js';
 import { createResponse } from '../../utils/response/createRespose.js';
 
@@ -5,10 +7,22 @@ class Game {
   constructor(id) {
     this.id = id;
     this.users = [];
+
+    this.initialGameState = {
+      baseHp: 1,
+      towerCost: 2,
+      initialGold: 3,
+      monsterSpawnInterval: 4,
+    };
   }
 
   addUser(user) {
     this.users.push(user);
+
+    // 게임 세션에 유저가 모두 모였으면 게임 시작
+    if (this.users.length >= 2) {
+      this.gameStart();
+    }
   }
 
   getUserById(userId) {
@@ -24,6 +38,18 @@ class Game {
     if (index != -1) {
       return this.users.splice(index, 1)[0];
     }
+  }
+  // 유저들 반환
+  getUsers() {
+    return this.users;
+  }
+  // 대전 시작
+  gameStart() {
+    const gameStartPacket = createMatchStartNotification();
+    const user1Socket = this.users[0].socket;
+    const user2Socket = this.users[1].socket;
+    user1Socket.write(gameStartPacket);
+    user2Socket.write(gameStartPacket);
   }
 
   // 아마 이게 맞을것 같은데
@@ -58,8 +84,3 @@ class Game {
 }
 
 export default Game;
-
-// message S2CSpawnEnemyMonsterNotification {
-//   int32 monsterId = 1;
-//   int32 monsterNumber = 2;
-// }

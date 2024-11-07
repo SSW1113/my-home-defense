@@ -1,6 +1,7 @@
 import { PacketType } from '../constants/header.js';
 import { registerHandler } from './user/register.handler.js';
 import { loginHandler } from './user/login.handler.js';
+import { matchStartHandler } from './game/match.handler.js';
 import { spawnMonsterHandler } from './game/spawMonster.handler.js';
 import { monsterDeathNotifyHandler } from './game/monsterDeath.handler.js';
 
@@ -12,6 +13,10 @@ const handlers = {
   [PacketType.LOGIN_REQUEST]: {
     handler: loginHandler,
     protoType: 'request.C2SLoginRequest',
+  },
+  [PacketType.MATCH_REQUEST]: {
+    handler: matchStartHandler,
+    protoType: 'request.C2SMatchRequest',
   },
   [PacketType.SPAWN_MONSTER_REQUEST]: {
     handler: spawnMonsterHandler,
