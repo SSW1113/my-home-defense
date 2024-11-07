@@ -3,7 +3,6 @@ import { registerHandler } from './user/register.handler.js';
 import { loginHandler } from './user/login.handler.js';
 import { towerPurchaseHandler } from './tower/towerPurchase.handler.js';
 import { matchStartHandler } from './game/match.handler.js';
-import { matchStartHandler } from './game/match.handler.js';
 import { spawnMonsterHandler } from './game/spawMonster.handler.js';
 import { monsterDeathNotifyHandler } from './game/monsterDeath.handler.js';
 
