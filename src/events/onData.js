@@ -69,6 +69,6 @@ export const onData = (socket) => async (data) => {
       await handler({ packetType, data, socket });
     }
   } catch (e) {
-    console.error('onData error: ', e.message);
+    console.error('onData error: ', e);
   }
 };

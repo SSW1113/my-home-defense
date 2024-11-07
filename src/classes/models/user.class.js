@@ -6,6 +6,7 @@ class User {
     this.id = id;
     this.sequence = 0;
     this.monsters = [];
+    this.gameSession;
 
     this.isWin = false;
 
@@ -22,6 +23,12 @@ class User {
       x: this.monsterPath[this.monsterPath.length - 1].x,
       y: this.monsterPath[this.monsterPath.length - 1].y,
     };
+  }
+  setGameSession(gameSession) {
+    this.gameSession = gameSession;
+  }
+  getGameSession() {
+    return this.gameSession;
   }
 
   /*
@@ -95,6 +102,12 @@ class User {
    */
   clearMonster() {
     this.monsters = [];
+  }
+
+  // 유저의 base에 데미지
+  getBaseDamage(dmg) {
+    this.base.hp -= dmg;
+    return this.base.hp;
   }
 }
 

@@ -1,13 +1,22 @@
 import Monster from '../../classes/models/monster.class.js';
 import { PacketType } from '../../constants/header.js';
-import { getGameSession } from '../../sessions/game.session.js';
+import { getGameSessionById } from '../../sessions/game.session.js';
+import { getUserBySocket } from '../../sessions/user.session.js';
 import { createResponse } from '../../utils/response/createRespose.js';
 
 export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
   try {
+    const user = getUserBySocket(socket); // 게임세션에 참여한 user찾기
+    if (!user) {
+      throw new Error('해당 유저가 존재하지 않습니다.');
+    }
+
+    const gameSession = getGameSessionById(user.getGameSession().id); // 게임 세션 조회
+    if (!gameSession) {
+      throw new Error('해당 게임 세션이 존재하지 않습니다.');
+    }
+
     // 세션 저장
-    const gameSession = getGameSession(); // 게임 세션 조회
-    const user = gameSession.getUserBySocket(socket); // 게임세션에 참여한 user찾기
     const monster = new Monster(); // 몬스터 생성시 레벨생각해보기 TODO
     user.createMonster(monster); // 유저에 몬스터 정보 추가
 

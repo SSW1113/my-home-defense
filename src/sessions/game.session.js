@@ -21,8 +21,3 @@ export const removeGamesession = (gameId) => {
 export const findMatchingGameSession = () => {
   return gameSessions.find((gameSession) => gameSession.users.length <= 1);
 };
-
-// 임시로 만듬
-export const getGameSession = () => {
-  return gameSessions[0];
-};
