@@ -1,6 +1,7 @@
 import { PacketType } from '../constants/header.js';
 import { registerHandler } from './user/register.handler.js';
 import { loginHandler } from './user/login.handler.js';
+import { towerPurchaseHandler } from './tower/towerPurchase.handler.js';
 import { matchStartHandler } from './game/match.handler.js';
 import { gameOverHandler, monsterBaseAttackHandler } from './game/monster.baseattack.js';
 import { spawnMonsterHandler } from './game/spawMonster.handler.js';
@@ -14,6 +15,10 @@ const handlers = {
   [PacketType.LOGIN_REQUEST]: {
     handler: loginHandler,
     protoType: 'request.C2SLoginRequest',
+  },
+  [PacketType.TOWER_PURCHASE_REQUEST]: {
+    handler: towerPurchaseHandler,
+    protoType: 'request.C2STowerPurchaseRequest',
   },
   [PacketType.MATCH_REQUEST]: {
     handler: matchStartHandler,

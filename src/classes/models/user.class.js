@@ -5,6 +5,9 @@ class User {
     this.socket = socket;
     this.id = id;
     this.sequence = 0;
+    this.towers = [];
+    this.monsters = [];
+    this.gameSession;
 
     // 게임 데이터
     this.gameSession;
@@ -38,30 +41,29 @@ class User {
       y: this.monsterPath[this.monsterPath.length - 1].y,
     };
   }
-
   setGameSession(gameSession) {
     this.gameSession = gameSession;
   }
+
   getGameSession() {
     return this.gameSession;
   }
 
-  /*
-  message GameState {
-    int32 gold = 1;
-    BaseData base = 2;
-    int32 highScore = 3;
-    repeated TowerData towers = 4;
-    repeated MonsterData monsters = 5;
-    int32 monsterLevel = 6;
-    int32 score = 7;
-    repeated Position monsterPath = 8;
-    Position basePosition = 9;
-  }
-  */
-
   getNextSequence() {
     return ++this.sequence;
+  }
+
+  addTower(tower) {
+    this.towers.push(tower);
+  }
+
+  getTower(id) {
+    return this.towers.find((tower) => tower.id === id);
+  }
+
+  removeTower(id) {
+    const index = this.towers.findIndex((tower) => tower.id === id);
+    this.towers.splice(index, 1);
   }
 
   generateRandomMonsterPath() {
