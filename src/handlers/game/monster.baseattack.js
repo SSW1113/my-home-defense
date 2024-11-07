@@ -25,6 +25,32 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
   opponentUsers.forEach((user) => {
     user.socket.write(opponentNotificationData);
   });
+
+  if (baseHp <= 0) {
+    gameEnd();
+  }
+};
+
+const gameEnd = (socket) => {
+  const gameSession = user.getGameSession();
+  const gameOverNotification = createGameOverNotification(false);
+  socket.write(gameOverNotification);
+  const opponentgameOverNotification = createGameOverNotification(true);
+  const opponentUsers = gameSession.getOpponentUser(user.id);
+  opponentUsers.forEach((user) => {
+    user.socket.write(opponentgameOverNotification);
+  });
+};
+
+export const gameOverHandler = async ({ packetType, data, socket }) => {
+  const gameSession = user.getGameSession();
+  const gameOverNotification = createGameOverNotification(false);
+  socket.write(gameOverNotification);
+  const opponentgameOverNotification = createGameOverNotification(true);
+  const opponentUsers = gameSession.getOpponentUser(user.id);
+  opponentUsers.forEach((user) => {
+    user.socket.write(opponentgameOverNotification);
+  });
 };
 
 export const createUpdateBaseHPNotification = (baseHp, isOpponent) => {
@@ -35,4 +61,13 @@ export const createUpdateBaseHPNotification = (baseHp, isOpponent) => {
   const protoType = PacketType.UPDATE_BASE_HP_NOTIFICATION;
 
   return makeNotification(protoType, baseHpNotificationData);
+};
+
+export const createGameOverNotification = (isWin) => {
+  const gameOverNotificationData = {
+    isWin,
+  };
+  const protoType = PacketType.GAME_OVER_NOTIFICATION;
+
+  return makeNotification(protoType, gameOverNotificationData);
 };
