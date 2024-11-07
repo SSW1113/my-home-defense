@@ -29,6 +29,8 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
 
     socket.write(spawnMonsterResponse);
 
+    const packet = gameSession.getAllState(user.id);
+    socket.write(packet);
     // 내가 생성한 몬스터 정보 다른 상대(클라)에게 알려주기
     gameSession.getAllSpawnEnemyMonster(user.id, monster);
   } catch (e) {

@@ -5,6 +5,10 @@ export const notificationProto = {
     protoType: 'gameNotification.S2CMatchStartNotification',
     fieldName: 'matchStartNotification',
   },
+  [PacketType.STATE_SYNC_NOTIFICATION]: {
+    protoType: 'gameNotification.S2CStateSyncNotification',
+    fieldName: 'stateSyncNotification',
+  },
   [PacketType.ADD_ENEMY_TOWER_NOTIFICATION]: {
     protoType: 'gameNotification.S2CAddEnemyTowerNotification',
     fieldName: 'addEnemyTowerNotification',
