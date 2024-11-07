@@ -100,7 +100,6 @@ class Game {
   // 상태동기화 (?)
   getAllState(userId) {
     const stateData = this.users.filter((user) => user.id === userId).map((user) => {
-      opponent = user;
       return {
         userGold: user.gold,
         baseHp: user.base.hp,
