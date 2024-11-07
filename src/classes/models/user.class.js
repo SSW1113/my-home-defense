@@ -6,6 +6,7 @@ class User {
     this.id = id;
     this.sequence = 0;
     this.monsters = [];
+    this.gameSession;
 
     // 게임 데이터
     this.gold = 500;
@@ -20,6 +21,12 @@ class User {
       x: this.monsterPath[this.monsterPath.length - 1].x,
       y: this.monsterPath[this.monsterPath.length - 1].y,
     };
+  }
+  setGameSession(gameSession) {
+    this.gameSession = gameSession;
+  }
+  getGameSession() {
+    return this.gameSession;
   }
 
   /*
