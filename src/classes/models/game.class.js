@@ -33,6 +33,11 @@ class Game {
     return this.users.find((user) => user.socket === socket);
   }
 
+  // 게임의 users에서 입력받은 유저가 아닌 상대 유저를 받아옴
+  getOpponentUser(userId) {
+    return this.users.filter((user) => user.id !== userId);
+  }
+
   removeUser(socket) {
     const index = this.users.findIndex((user) => user.socket === socket);
     if (index != -1) {

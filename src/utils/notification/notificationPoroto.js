@@ -9,4 +9,8 @@ export const notificationProto = {
     protoType: 'gameNotification.S2CUpdateBaseHPNotification',
     fieldName: 'updateBaseHpNotification',
   },
+  [PacketType.GAME_OVER_NOTIFICATION]: {
+    protoType: 'gameNotification.S2CGameOverNotification',
+    fieldName: 'gameOverNotification',
+  },
 };

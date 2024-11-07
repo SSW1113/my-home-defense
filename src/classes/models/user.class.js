@@ -101,6 +101,12 @@ class User {
   clearMonster() {
     this.monsters = [];
   }
+
+  // 유저의 base에 데미지
+  getBaseDamage(dmg) {
+    this.base.hp -= dmg;
+    return this.base.hp;
+  }
 }
 
 export default User;

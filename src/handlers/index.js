@@ -21,15 +21,20 @@ const handlers = {
   },
   [PacketType.MONSTER_ATTACK_BASE_REQUEST]: {
     handler: monsterBaseAttackHandler,
-    [PacketType.SPAWN_MONSTER_REQUEST]: {
-      handler: spawnMonsterHandler,
-      protoType: 'request.C2SSpawnMonsterRequest',
-    },
-    [PacketType.MONSTER_DEATH_NOTIFICATION]: {
-      handler: monsterDeathNotifyHandler,
-      protoType: 'gameNotification.C2SMonsterDeathNotification',
-    },
+    protoType: 'request.C2SMonsterAttackBaseRequest',
   },
+  [PacketType.SPAWN_MONSTER_REQUEST]: {
+    handler: spawnMonsterHandler,
+    protoType: 'request.C2SSpawnMonsterRequest',
+  },
+  [PacketType.MONSTER_DEATH_NOTIFICATION]: {
+    handler: monsterDeathNotifyHandler,
+    protoType: 'gameNotification.C2SMonsterDeathNotification',
+  },
+  // [PacketType.GAME_END_REQUEST]: {
+  //   handler: gameOverHandler,
+  //   protoType: 'request.C2SGameEndRequest',
+  // },
 };
 
 export const getHandlerById = (packetType) => {

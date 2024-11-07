@@ -61,16 +61,14 @@ export const createMatchStartNotification = () => {
       { x: 120, y: 300 },
       { x: 180, y: 300 },
       { x: 240, y: 300 },
+      { x: 1490, y: 300 },
     ], // repeated Position
-    basePosition: { x: 240, y: 300 }, // Position
+    basePosition: { x: 1300, y: 300 }, // Position
   };
 
   const opponentGameData = {
     gold: 100,
-    base: {
-      hp: 500,
-      maxHp: 500,
-    }, // BaseData
+    base: { hp: 500, maxHp: 500 }, // BaseData
     highScore: 100,
     towers: [
       { towerId: 1, x: 10, y: 20 },
@@ -83,13 +81,14 @@ export const createMatchStartNotification = () => {
     monsterLevel: 1,
     score: 0,
     monsterPath: [
-      { x: 0, y: 10 },
-      { x: 10, y: 10 },
-      { x: 20, y: 10 },
-      { x: 30, y: 10 },
-      { x: 40, y: 10 },
+      { x: 0, y: 300 },
+      { x: 60, y: 300 },
+      { x: 120, y: 300 },
+      { x: 180, y: 300 },
+      { x: 240, y: 300 },
+      { x: 1490, y: 300 },
     ], // repeated Position
-    basePosition: { x: 40, y: 10 }, // Position
+    basePosition: { x: 1300, y: 300 }, // Position
   };
 
   const notifiData = {
