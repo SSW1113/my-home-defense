@@ -1,4 +1,5 @@
 import { PacketType } from '../../constants/header.js';
+import { removeGamesession } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 import { makeNotification } from '../../utils/notification/game.notification.js';
 
@@ -26,15 +27,19 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
     user.socket.write(opponentNotificationData);
   });
 
+  // 게임 종료
   if (baseHp <= 0) {
-    gameEnd();
+    gameEnd(socket, gameSession);
+    removeGamesession(user.gameSession.id);
   }
 };
 
-const gameEnd = (socket) => {
-  const gameSession = user.getGameSession();
+const gameEnd = (socket, gameSession) => {
+  // 게임 종료 notification 생성 및 전송
   const gameOverNotification = createGameOverNotification(false);
   socket.write(gameOverNotification);
+
+  // 적들에게 게임 종료 notification 생성 및 전송
   const opponentgameOverNotification = createGameOverNotification(true);
   const opponentUsers = gameSession.getOpponentUser(user.id);
   opponentUsers.forEach((user) => {
