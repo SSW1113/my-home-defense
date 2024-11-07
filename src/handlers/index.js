@@ -24,7 +24,7 @@ const handlers = {
   },
   [PacketType.MONSTER_DEATH_NOTIFICATION]: {
     handler: monsterDeathNotifyHandler,
-    protoType: 'request.C2SMonsterDeathNotification',
+    protoType: 'gameNotification.C2SMonsterDeathNotification',
   },
 };
 
