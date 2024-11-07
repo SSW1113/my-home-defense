@@ -40,10 +40,13 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
       user.socket.write(opponentgameOverNotification);
     });
 
+    // 게임이 종료됐으니 게임 세션 삭제
     removeGamesession(user.gameSession.id);
   }
 };
 
+// GameEndRequest에 관한 핸들러
+// 클라이언트에서 현재 C2SGameEndRequest를 보내지 않기 때문에 쓰일 일은 아직 없음
 export const gameOverHandler = async ({ packetType, data, socket }) => {
   const gameSession = user.getGameSession();
   const gameOverNotification = createGameOverNotification(false);
@@ -55,6 +58,7 @@ export const gameOverHandler = async ({ packetType, data, socket }) => {
   });
 };
 
+// BaseHp Notification 생성
 export const createUpdateBaseHPNotification = (baseHp, isOpponent) => {
   const baseHpNotificationData = {
     isOpponent,
@@ -65,6 +69,7 @@ export const createUpdateBaseHPNotification = (baseHp, isOpponent) => {
   return makeNotification(protoType, baseHpNotificationData);
 };
 
+// gameover notification 생성
 export const createGameOverNotification = (isWin) => {
   const gameOverNotificationData = {
     isWin,
