@@ -52,24 +52,22 @@ class Game {
     user2Socket.write(gameStartPacket);
   }
 
-  // 아마 이게 맞을것 같은데
-  getAllSpawnEnemyMonster(userId) {
-    const user = this.users.find((user) => user.id === userId);
-
-    // 다른 유저의 몬스터 정보를 찾고 전달해주기 // 그러면 일단 각 유저들이 몬스터를 생성한 후에 실행해 줘야 맞겠는데
+  // 현재 생성한 몬스터 정보를 다른유저에게 알리는 함수
+  getAllSpawnEnemyMonster(userId, monster) {
     this.users
       .filter((user) => user.id !== userId)
       .forEach((otherUser) => {
-        const lastIndex = otherUser.monsters.length - 1;
         const monsterData = {
-          monsterId: otherUser.monsters[lastIndex].id,
-          monsterNumber: otherUser.monsters[lastIndex].monsterNumber,
+          monsterId: monster.id,
+          monsterNumber: monster.monsterNumber,
         };
+
         const notification = createResponse(
           PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
           monsterData,
         );
-        user.socket.write(notification); // 자기 자신에게 정보 전달
+
+        otherUser.socket.write(notification); // 다른 유저에게 새 몬스터 정보 알림 // 제발
       });
   }
 

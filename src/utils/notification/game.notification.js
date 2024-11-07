@@ -38,7 +38,14 @@ export const createMatchStartNotification = () => {
     baseHp: 500,
     towerCost: 500,
     initialGold: 1000,
-    monsterSpawnInterval: 100,
+    monsterSpawnInterval: 5000,
+  };
+
+  // 현재 플레이어 몬스터 경로 및 현재 플레이어 베이스 위치
+  const monsterPath = generateRandomMonsterPath();
+  const basePath = {
+    x: monsterPath[monsterPath.length - 1].x,
+    y: monsterPath[monsterPath.length - 1].y,
   };
 
   const playerGameData = {
@@ -46,23 +53,21 @@ export const createMatchStartNotification = () => {
     base: { hp: 500, maxHp: 500 }, // BaseData
     highScore: 100,
     towers: [
-      { towerId: 1, x: 10, y: 20 },
-      { towerId: 2, x: 20, y: 10 },
+      { towerId: 1, x: 500, y: 320 },
+      { towerId: 2, x: 600, y: 300 },
     ], // repeated TowerData
-    monsters: [
-      { monsterId: 1, monsterNumber: 1, level: 1 },
-      { monsterId: 2, monsterNumber: 2, level: 2 },
-    ], // repeated MonsterData
+    monsters: [], // repeated MonsterData
     monsterLevel: 1,
     score: 0,
-    monsterPath: [
-      { x: 0, y: 300 },
-      { x: 60, y: 300 },
-      { x: 120, y: 300 },
-      { x: 180, y: 300 },
-      { x: 240, y: 300 },
-    ], // repeated Position
-    basePosition: { x: 240, y: 300 }, // Position
+    monsterPath: monsterPath, // repeated Position
+    basePosition: basePath, // Position
+  };
+
+  // 상대 몬스터 경로 및 상대 베이스 위치
+  const opponentMonsterPath = generateRandomMonsterPath();
+  const opponentBasePath = {
+    x: opponentMonsterPath[opponentMonsterPath.length - 1].x,
+    y: opponentMonsterPath[opponentMonsterPath.length - 1].y,
   };
 
   const opponentGameData = {
@@ -73,23 +78,14 @@ export const createMatchStartNotification = () => {
     }, // BaseData
     highScore: 100,
     towers: [
-      { towerId: 1, x: 10, y: 20 },
-      { towerId: 2, x: 20, y: 10 },
+      { towerId: 1, x: 500, y: 320 },
+      { towerId: 2, x: 600, y: 300 },
     ], // repeated TowerData
-    monsters: [
-      { monsterId: 1, monsterNumber: 1, level: 1 },
-      { monsterId: 2, monsterNumber: 2, level: 2 },
-    ], // repeated MonsterData
+    monsters: [], // repeated MonsterData
     monsterLevel: 1,
     score: 0,
-    monsterPath: [
-      { x: 0, y: 10 },
-      { x: 10, y: 10 },
-      { x: 20, y: 10 },
-      { x: 30, y: 10 },
-      { x: 40, y: 10 },
-    ], // repeated Position
-    basePosition: { x: 40, y: 10 }, // Position
+    monsterPath: opponentMonsterPath, // repeated Position
+    basePosition: opponentBasePath, // Position
   };
 
   const notifiData = {
@@ -103,25 +99,40 @@ export const createMatchStartNotification = () => {
   return makeNotification(protoType, notifiData);
 };
 
-// message InitialGameState {
-//     int32 baseHp = 1;
-//     int32 towerCost = 2;
-//     int32 initialGold = 3;
-//     int32 monsterSpawnInterval = 4;
-//   }
+// 몬스터 경로생성 함수
+function generateRandomMonsterPath() {
+  // 게임 화면 특정 크기
+  const minX = 0;
+  const maxX = 1400;
+  const minY = 250;
+  const maxY = 400;
 
-//   message GameState {
-//     int32 gold = 1;
-//     BaseData base = 2;
-//     int32 highScore = 3;
-//     repeated TowerData towers = 4;
-//     repeated MonsterData monsters = 5;
-//     int32 monsterLevel = 6;
-//     int32 score = 7;
-//     repeated Position monsterPath = 8;
-//     Position basePosition = 9;
-//   }
+  const pathSize = 60; // 60 x 60 사이즈로 되어있음
 
-// InitialGameState initialGameState = 1;
-// GameState playerData = 2;
-// GameState opponentData = 3;
+  const path = [];
+  let currentX = minX;
+  let currentY = Math.floor(Math.random() * 21) + 300; // 300 ~ 320 범위의 y 시작 (캔버스 y축 중간쯤에서 시작할 수 있도록 유도)
+
+  path.push({ x: currentX, y: currentY }); // 처음 경로 지정
+
+  while (currentX < maxX) {
+    currentX += Math.floor(Math.random()) + pathSize; // 0 ~ 60 범위의 x 증가
+    // x 좌표에 대한 clamp 처리
+    if (currentX > maxX) {
+      currentX = maxX;
+    }
+
+    currentY += Math.floor(Math.random() * (pathSize * 2)) - pathSize; // -60 ~ 60 범위의 y 변경
+    // y 좌표에 대한 clamp 처리
+    if (currentY < minY) {
+      currentY = minY;
+    }
+    if (currentY > maxY) {
+      currentY = maxY;
+    }
+
+    path.push({ x: currentX, y: currentY });
+  }
+
+  return path;
+}
