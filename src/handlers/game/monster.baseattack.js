@@ -1,4 +1,5 @@
 import { PacketType } from '../../constants/header.js';
+import { removeGamesession } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 import { makeNotification } from '../../utils/notification/game.notification.js';
 
@@ -25,6 +26,33 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
   opponentUsers.forEach((user) => {
     user.socket.write(opponentNotificationData);
   });
+
+  // 게임 종료
+  if (baseHp <= 0) {
+    // 게임 종료 notification 전송 (패배)
+    const gameOverNotification = createGameOverNotification(false);
+    socket.write(gameOverNotification);
+
+    // 적들에게 게임 종료 notification 생성 및 전송 (승리)
+    const opponentgameOverNotification = createGameOverNotification(true);
+    const opponentUsers = gameSession.getOpponentUser(user.id);
+    opponentUsers.forEach((user) => {
+      user.socket.write(opponentgameOverNotification);
+    });
+
+    removeGamesession(user.gameSession.id);
+  }
+};
+
+export const gameOverHandler = async ({ packetType, data, socket }) => {
+  const gameSession = user.getGameSession();
+  const gameOverNotification = createGameOverNotification(false);
+  socket.write(gameOverNotification);
+  const opponentgameOverNotification = createGameOverNotification(true);
+  const opponentUsers = gameSession.getOpponentUser(user.id);
+  opponentUsers.forEach((user) => {
+    user.socket.write(opponentgameOverNotification);
+  });
 };
 
 export const createUpdateBaseHPNotification = (baseHp, isOpponent) => {
@@ -35,4 +63,13 @@ export const createUpdateBaseHPNotification = (baseHp, isOpponent) => {
   const protoType = PacketType.UPDATE_BASE_HP_NOTIFICATION;
 
   return makeNotification(protoType, baseHpNotificationData);
+};
+
+export const createGameOverNotification = (isWin) => {
+  const gameOverNotificationData = {
+    isWin,
+  };
+  const protoType = PacketType.GAME_OVER_NOTIFICATION;
+
+  return makeNotification(protoType, gameOverNotificationData);
 };

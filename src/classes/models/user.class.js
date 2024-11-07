@@ -5,14 +5,13 @@ class User {
     this.socket = socket;
     this.id = id;
     this.sequence = 0;
-    this.monsters = [];
-    this.gameSession;
 
     this.isWin = false;
 
     // 게임 데이터
-    this.gold = 4000;
-    this.base = new Base(200);
+    this.gameSession;
+    this.gold = 500;
+    this.base = new Base(100);
     this.towers = [];
     this.monsters = [];
     this.monsterLevel = 1;
@@ -24,6 +23,24 @@ class User {
       y: this.monsterPath[this.monsterPath.length - 1].y,
     };
   }
+
+  // 게임 데이터 초기화
+  initUser() {
+    this.gameSession = null;
+    this.gold = 500;
+    this.base = new Base(100);
+    this.towers = [];
+    this.monsters = [];
+    this.monsterLevel = 1;
+    this.score = 0;
+    this.highscore = 0; // db 연결 필요
+    this.monsterPath = this.generateRandomMonsterPath();
+    this.basePosition = {
+      x: this.monsterPath[this.monsterPath.length - 1].x,
+      y: this.monsterPath[this.monsterPath.length - 1].y,
+    };
+  }
+
   setGameSession(gameSession) {
     this.gameSession = gameSession;
   }

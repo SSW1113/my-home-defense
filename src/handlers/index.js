@@ -2,7 +2,7 @@ import { PacketType } from '../constants/header.js';
 import { registerHandler } from './user/register.handler.js';
 import { loginHandler } from './user/login.handler.js';
 import { matchStartHandler } from './game/match.handler.js';
-import { monsterBaseAttackHandler } from './game/monster.baseattack.js';
+import { gameOverHandler, monsterBaseAttackHandler } from './game/monster.baseattack.js';
 import { spawnMonsterHandler } from './game/spawMonster.handler.js';
 import { monsterDeathNotifyHandler } from './game/monsterDeath.handler.js';
 
@@ -31,10 +31,10 @@ const handlers = {
     handler: monsterDeathNotifyHandler,
     protoType: 'gameNotification.C2SMonsterDeathNotification',
   },
-  // [PacketType.GAME_END_REQUEST]: {
-  //   handler: gameOverHandler,
-  //   protoType: 'request.C2SGameEndRequest',
-  // },
+  [PacketType.GAME_END_REQUEST]: {
+    handler: gameOverHandler,
+    protoType: 'request.C2SGameEndRequest',
+  },
 };
 
 export const getHandlerById = (packetType) => {
