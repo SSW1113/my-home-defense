@@ -11,9 +11,6 @@ export const findUserById = async (userId) => {
 
 // db에 새로운 유저 추가
 export const createUser = async (id, password, email) => {
-  console.log(typeof id);
-  console.log(typeof password);
-  console.log(typeof email);
   await dbPool.USERS_DB.query(SQL_QUERIES.CREATE_USER, [id, password, email]);
   return { id, password, email };
 };

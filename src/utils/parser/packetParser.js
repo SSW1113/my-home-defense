@@ -18,6 +18,7 @@ export const packetParser = (packetType, data) => {
     const payloadField = GamePacket.oneofs['payload'].oneof.find(
       (field) => gamePacket[field] != null,
     );
+    console.log('payloadField: ', payloadField);
     if (!payloadField) {
       throw new Error('No valid payload field found in GamePacket');
     }
