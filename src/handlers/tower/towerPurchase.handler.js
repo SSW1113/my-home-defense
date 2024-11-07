@@ -4,6 +4,7 @@ import { createResponse } from '../../utils/response/createRespose.js';
 import { PacketType } from '../../constants/header.js';
 import { config } from '../../config/config.js';
 import { v4 as uuidv4 } from 'uuid';
+import { createAddEnemyTowerNotification } from '../../utils/notification/tower.notification.js';
 
 export const towerPurchaseHandler = async ({ data, socket }) => {
   try {
@@ -17,15 +18,19 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
 
     const tower = new Tower(towerId, x, y);
 
+    console.log('tower: ', tower);
+
     user.towers.push(tower);
 
     // 돈 검증
 
     const responseData = {
-      towerId: 1,
+      towerId: towerId,
     };
 
     const towerPurchaseResponse = createResponse(PacketType.TOWER_PURCHASE_RESPONSE, responseData);
+    const towerData = { towerId, x, y };
+    createAddEnemyTowerNotification(towerData, socket);
     socket.write(towerPurchaseResponse);
   } catch (e) {
     console.error('Tower purchase handler error: ', e);
