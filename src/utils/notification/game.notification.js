@@ -46,39 +46,50 @@ export const createMatchStartNotification = () => {
     base: { hp: 500, maxHp: 500 }, // BaseData
     highScore: 100,
     towers: [
-      { towerId: 1, x: 500, y: 350 },
-      { towerId: 2, x: 550, y: 330 },
-      { towerId: 3, x: 450, y: 250 },
+      { towerId: 1, x: 10, y: 20 },
+      { towerId: 2, x: 20, y: 10 },
     ], // repeated TowerData
-    monsters: [], // repeated MonsterData
+    monsters: [
+      { monsterId: 1, monsterNumber: 1, level: 1 },
+      { monsterId: 2, monsterNumber: 2, level: 2 },
+    ], // repeated MonsterData
     monsterLevel: 1,
     score: 0,
     monsterPath: [
       { x: 0, y: 300 },
-      { x: 1500, y: 300 },
+      { x: 60, y: 300 },
+      { x: 120, y: 300 },
+      { x: 180, y: 300 },
+      { x: 240, y: 300 },
     ], // repeated Position
-    basePosition: { x: 1350, y: 300 }, // Position
+    basePosition: { x: 240, y: 300 }, // Position
   };
 
   const opponentGameData = {
     gold: 100,
-    base: { hp: 500, maxHp: 500 }, // BaseData
+    base: {
+      hp: 500,
+      maxHp: 500,
+    }, // BaseData
     highScore: 100,
     towers: [
-      { towerId: 1, x: 500, y: 350 },
-      { towerId: 2, x: 550, y: 330 },
-      { towerId: 3, x: 450, y: 250 },
+      { towerId: 1, x: 10, y: 20 },
+      { towerId: 2, x: 20, y: 10 },
     ], // repeated TowerData
-    monsters: [], // repeated MonsterData
+    monsters: [
+      { monsterId: 1, monsterNumber: 1, level: 1 },
+      { monsterId: 2, monsterNumber: 2, level: 2 },
+    ], // repeated MonsterData
     monsterLevel: 1,
     score: 0,
     monsterPath: [
-      { x: 0, y: 300 },
-      { x: 500, y: 350 },
-      { x: 1000, y: 250 },
-      { x: 1500, y: 300 },
+      { x: 0, y: 10 },
+      { x: 10, y: 10 },
+      { x: 20, y: 10 },
+      { x: 30, y: 10 },
+      { x: 40, y: 10 },
     ], // repeated Position
-    basePosition: { x: 1350, y: 300 }, // Position
+    basePosition: { x: 40, y: 10 }, // Position
   };
 
   const notifiData = {

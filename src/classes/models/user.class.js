@@ -1,10 +1,12 @@
-import Base from "./base.class.js";
+import Base from './base.class.js';
 
 class User {
   constructor(socket, id) {
     this.socket = socket;
     this.id = id;
     this.sequence = 0;
+    this.monsters = [];
+    this.gameSession;
 
     // 게임 데이터
     this.gold = 500;
@@ -15,7 +17,16 @@ class User {
     this.score = 0;
     this.highscore = 0; // db 연결 필요
     this.monsterPath = this.generateRandomMonsterPath();
-    this.basePosition = { x: this.monsterPath[this.monsterPath.length - 1].x, y: this.monsterPath[this.monsterPath.length - 1].y }
+    this.basePosition = {
+      x: this.monsterPath[this.monsterPath.length - 1].x,
+      y: this.monsterPath[this.monsterPath.length - 1].y,
+    };
+  }
+  setGameSession(gameSession) {
+    this.gameSession = gameSession;
+  }
+  getGameSession() {
+    return this.gameSession;
   }
 
   /*
@@ -63,6 +74,32 @@ class User {
     }
 
     return path;
+  }
+
+  createMonster(monster) {
+    this.monsters.push(monster);
+  }
+
+  getMonster(monsterId) {
+    const monster = this.monsters.find((monster) => monster.id === monsterId);
+    return monster;
+  }
+
+  /**
+   * 몬스터 삭제
+   * @param {int} monsterId 클라이언트에서 받은 monsterId 넣어주기
+   * @returns
+   */
+  removeMonster(monsterId) {
+    const index = this.monsters.findIndex((monster) => monster.id === monsterId);
+    return this.monsters.splice(index, 1)[0];
+  }
+
+  /**
+   * 게임 종료 및 여러 상황에서 전체 몬스터 정보 초기화
+   */
+  clearMonster() {
+    this.monsters = [];
   }
 }
 
