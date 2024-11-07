@@ -68,15 +68,6 @@ export const createMatchStartNotification = () => {
   const opponentBasePath = {
     x: opponentMonsterPath[opponentMonsterPath.length - 1].x,
     y: opponentMonsterPath[opponentMonsterPath.length - 1].y,
-    monsterPath: [
-      { x: 0, y: 300 },
-      { x: 60, y: 300 },
-      { x: 120, y: 300 },
-      { x: 180, y: 300 },
-      { x: 240, y: 300 },
-      { x: 1490, y: 300 },
-    ], // repeated Position
-    basePosition: { x: 1300, y: 300 }, // Position
   };
 
   const opponentGameData = {
