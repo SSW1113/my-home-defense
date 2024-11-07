@@ -63,7 +63,7 @@ export const loginHandler = async ({ packetType, data, socket }) => {
         await updateUserLogin(id);
 
         // 세션에 유저 추가
-        addUser(id, socket);
+        addUser(socket, id);
 
         responseData = createSuccessResponse(token);
         console.log('login success');
