@@ -16,6 +16,9 @@ export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) =>
 
     // 이제 다른 유저에게 몬스터상황 알려주기 // 이게 맞기를
     gameSession.notifyEnemyMonsterDeath(user.id, monsterId);
+
+    const packet = gameSession.getAllState(user.id);
+    socket.write(packet);
   } catch (e) {
     console.error(e);
     // handlerError(socket, e);

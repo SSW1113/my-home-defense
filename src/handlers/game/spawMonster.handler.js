@@ -22,6 +22,9 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
 
     // 아 아닌가 이거는 계속해서 보내주는게 맞나? 일단 해보고 생각해보기
     gameSession.getAllSpawnEnemyMonster(user.id);
+
+    const packet = gameSession.getAllState(user.id);
+    socket.write(packet);
   } catch (e) {
     console.error(e);
     // handlerError(socket, e);

@@ -1,4 +1,4 @@
-import { createMatchStartNotification } from '../../utils/notification/game.notification.js';
+import { createMatchStartNotification, makeNotification } from '../../utils/notification/game.notification.js';
 
 import { PacketType } from '../../constants/header.js';
 import { createResponse } from '../../utils/response/createRespose.js';
@@ -81,6 +81,35 @@ class Game {
       .filter((user) => user.id !== userId)
       .forEach((otherUser) => otherUser.socket.write(notification)); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
   }
+
+
+  //  message S2CStateSyncNotification {
+  //   int32 userGold = 1;
+  //   int32 baseHp = 2;
+  //   int32 monsterLevel = 3;
+  //   int32 score = 4;
+  //   repeated TowerData towers = 5;
+  //   repeated MonsterData monsters = 6;
+  // }
+
+  // 상태동기화 (?)
+  getAllState(userId) {
+    const stateData = this.users.filter((user) => user.id === userId).map((user) => {
+      opponent = user;
+      return {
+        userGold: user.gold,
+        baseHp: user.base.hp,
+        monsterLevel: user.monsterLevel,
+        score: user.score,
+        towers: user.towers,
+        monsters: user.monsters,
+      };
+    });
+    console.log(' id : ', userId, stateData);
+    const protoType = PacketType.STATE_SYNC_NOTIFICATION;
+    return makeNotification(protoType, stateData);
+  }
+
 }
 
 export default Game;

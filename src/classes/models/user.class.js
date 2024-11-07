@@ -7,9 +7,11 @@ class User {
     this.sequence = 0;
     this.monsters = [];
 
+    this.isWin = false;
+
     // 게임 데이터
-    this.gold = 500;
-    this.base = new Base(100);
+    this.gold = 4000;
+    this.base = new Base(200);
     this.towers = [];
     this.monsters = [];
     this.monsterLevel = 1;
@@ -43,7 +45,7 @@ class User {
   generateRandomMonsterPath() {
     const path = [];
     let currentX = 0;
-    let currentY = Math.floor(Math.random() * 21) + 500; // 500 ~ 520 범위의 y 시작 (캔버스 y축 중간쯤에서 시작할 수 있도록 유도)
+    let currentY = Math.floor(Math.random() * 21) + 290; // 
 
     path.push({ x: currentX, y: currentY });
 

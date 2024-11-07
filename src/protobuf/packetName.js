@@ -4,6 +4,7 @@ export const packetNames = {
   },
   gameNotification: {
     S2CMatchStartNotification: 'protoPacket.S2CMatchStartNotification',
+    S2CStateSyncNotification: 'protoPacket.S2CStateSyncNotification',
     S2CAddEnemyTowerNotification: 'protoPacket.S2CAddEnemyTowerNotification',
     S2CSpawnEnemyMonsterNotification: 'protoPacket.S2CSpawnEnemyMonsterNotification',
     S2CEnemyTowerAttackNotification: 'protoPacket.S2CEnemyTowerAttackNotification',
