@@ -6,20 +6,21 @@ import { getUserBySocket } from '../../sessions/user.session.js';
 import { makeNotification } from '../../utils/notification/game.notification.js';
 
 export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => {
-  console.log('base attack');
-  const { damage } = data;
-  console.log('damage: ', damage);
+  try {
+    console.log('base attack');
+    const { damage } = data;
+    console.log('damage: ', damage);
 
-  // 유저의 base의 체력 깎기
-  const user = getUserBySocket(socket);
-  const baseHp = user.getBaseDamage(damage);
+    // 유저의 base의 체력 깎기
+    const user = getUserBySocket(socket);
+    const baseHp = user.getBaseDamage(damage);
 
-  // 응답 데이터 생성
-  const userNotificationData = createUpdateBaseHPNotification(baseHp, false);
-  const opponentNotificationData = createUpdateBaseHPNotification(baseHp, true);
+    // 응답 데이터 생성
+    const userNotificationData = createUpdateBaseHPNotification(baseHp, false);
+    const opponentNotificationData = createUpdateBaseHPNotification(baseHp, true);
 
-  // 공격 받은 유저의 데이터 baseHp를 유저에게 전달
-  socket.write(userNotificationData);
+    // 공격 받은 유저의 데이터 baseHp를 유저에게 전달
+    socket.write(userNotificationData);
 
   // 공격 받은 유저 기준 적에게 유저의 baseHp 전달
   const gameSession = user.getGameSession();
@@ -41,7 +42,7 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
     const opponentgameOverNotification = createGameOverNotification(true);
     const opponentUsers = gameSession.getOpponentUser(user.id);
     opponentUsers.forEach((user) => {
-      user.socket.write(opponentgameOverNotification);
+      user.socket.write(opponentNotificationData);
     });
     gameEnd(gameSession);
   }
@@ -56,15 +57,13 @@ export const gameEnd = async (gameSession) => {
   // db에 게임 로그 저장
   saveGameLog(user1, user2);
 
-  let score = 1000;
-
   for (const user of users) {
     const userHighScore = await getUserHighscoreById(user.id); // await 추가
+    console.log('user score: ', user.score);
     console.log('userHighScore: ', userHighScore);
-    user.score = score;
+    
     if (user.score > userHighScore) {
       await updateUserHighscore(user.id, user.score); // 업데이트 함수도 await
-      score += 321;
     }
   }
 
