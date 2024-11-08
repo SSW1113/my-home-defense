@@ -37,7 +37,7 @@ export const createMatchStartNotification = () => {
   const initialGameStateData = {
     baseHp: 500,
     towerCost: 500,
-    initialGold: 1000,
+    initialGold: 10000,
     monsterSpawnInterval: 5000,
   };
 
@@ -49,7 +49,7 @@ export const createMatchStartNotification = () => {
   };
 
   const playerGameData = {
-    gold: 100,
+    gold: 10000,
     base: { hp: 500, maxHp: 500 }, // BaseData
     highScore: 100,
     towers: [
@@ -71,7 +71,7 @@ export const createMatchStartNotification = () => {
   };
 
   const opponentGameData = {
-    gold: 100,
+    gold: 10000,
     base: { hp: 500, maxHp: 500 }, // BaseData
     highScore: 100,
     towers: [
