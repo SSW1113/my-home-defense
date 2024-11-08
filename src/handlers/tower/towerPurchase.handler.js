@@ -2,9 +2,8 @@ import { getUserBySocket } from '../../sessions/user.session.js';
 import Tower from '../../classes/models/tower.class.js';
 import { createResponse } from '../../utils/response/createRespose.js';
 import { PacketType } from '../../constants/header.js';
-import { config } from '../../config/config.js';
-import { v4 as uuidv4 } from 'uuid';
 import { createAddEnemyTowerNotification } from '../../utils/notification/tower.notification.js';
+import { getGameSessionById } from '../../sessions/game.session.js';
 
 export const towerPurchaseHandler = async ({ data, socket }) => {
   try {
@@ -22,15 +21,23 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
 
     user.towers.push(tower);
 
-    // 돈 검증
+    let responseData;
 
-    const responseData = {
-      towerId: towerId,
-    };
+    // 돈 검증
+    const gameSession = getGameSessionById(user.getGameSession().id);
+    if (user.gold < gameSession.initialGameState.towerCost) {
+      responseData = {
+        towerId: undefined, // 이게 맞나
+      };
+    } else {
+      responseData = {
+        towerId: towerId,
+      };
+      const towerData = { towerId, x, y };
+      createAddEnemyTowerNotification(towerData, socket);
+    }
 
     const towerPurchaseResponse = createResponse(PacketType.TOWER_PURCHASE_RESPONSE, responseData);
-    const towerData = { towerId, x, y };
-    createAddEnemyTowerNotification(towerData, socket);
     socket.write(towerPurchaseResponse);
   } catch (e) {
     console.error('Tower purchase handler error: ', e);

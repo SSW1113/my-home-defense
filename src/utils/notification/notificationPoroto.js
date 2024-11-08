@@ -9,4 +9,8 @@ export const notificationProto = {
     protoType: 'gameNotification.S2CAddEnemyTowerNotification',
     fieldName: 'addEnemyTowerNotification',
   },
+  [PacketType.ENEMY_TOWER_ATTACK_NOTIFICATION]: {
+    protoType: 'gameNotification.S2CEnemyTowerAttackNotification',
+    fieldName: 'enemyTowerAttackNotification',
+  },
 };

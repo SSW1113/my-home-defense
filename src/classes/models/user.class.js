@@ -103,6 +103,11 @@ class User {
   clearMonster() {
     this.monsters = [];
   }
+
+  getTower(towerId) {
+    const tower = this.towers.find((tower) => tower.id === towerId);
+    return tower;
+  }
 }
 
 export default User;
