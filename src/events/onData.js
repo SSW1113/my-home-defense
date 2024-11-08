@@ -51,21 +51,21 @@ export const onData = (socket) => async (data) => {
         break;
       }
 
-      console.log('packetType', packetType);
-      console.log('version: ', version);
-      console.log('sequence', sequence);
-      console.log('payload Length: ', payloadLength);
+      // console.log('packetType', packetType);
+      // console.log('version: ', version);
+      // console.log('sequence', sequence);
+      // console.log('payload Length: ', payloadLength);
 
       // payload
       const payload = socket.buffer.subarray(totalHeaderLength, totalPacketLength);
-      console.log('payload: ', payload);
+      // console.log('payload: ', payload);
       // 이후의 데이터 다시 저장
       socket.buffer = socket.buffer.subarray(totalPacketLength);
 
       const data = packetParser(packetType, payload);
 
       const handler = getHandlerById(packetType);
-      console.log(handler);
+      // console.log(handler);
       await handler({ packetType, data, socket });
     }
   } catch (e) {

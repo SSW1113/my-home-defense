@@ -51,16 +51,12 @@ class Game {
   }
   // 대전 시작
   gameStart() {
-    const gameStartPacket = createMatchStartNotification();
+    const gameStartPacket1 = createMatchStartNotification(this.users[0], this.users[1]);
+    const gameStartPacket2 = createMatchStartNotification(this.users[1], this.users[0]);
     const user1Socket = this.users[0].socket;
     const user2Socket = this.users[1].socket;
-    user1Socket.write(gameStartPacket);
-    user2Socket.write(gameStartPacket);
-    const user1 = this.users[0];
-    const user2 = this.users[1];
-
-    user1.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
-    user2.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
+    user1Socket.write(gameStartPacket1);
+    user2Socket.write(gameStartPacket2);
   }
 
   // 현재 생성한 몬스터 정보를 다른유저에게 알리는 함수
@@ -89,16 +85,7 @@ class Game {
       .forEach((otherUser) => otherUser.socket.write(notification)); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
   }
 
-  //  message S2CStateSyncNotification {
-  //   int32 userGold = 1;
-  //   int32 baseHp = 2;
-  //   int32 monsterLevel = 3;
-  //   int32 score = 4;
-  //   repeated TowerData towers = 5;
-  //   repeated MonsterData monsters = 6;
-  // }
-
-  // 상태동기화 (?)
+  // 상태동기화
   getAllState(userId) {
     const user = this.getUserById(userId);
     const stateData = {

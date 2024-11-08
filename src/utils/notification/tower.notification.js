@@ -1,8 +1,7 @@
 import { PacketType } from '../../constants/header.js';
 import { makeNotification } from './game.notification.js';
 
-export const createAddEnemyTowerNotification = (data, otherUsers) => {
-  console.log('addEnemyTowerNotification');
+export const createAddEnemyTowerNotification = (data, otherUser) => {
   const { towerId, x, y } = data;
 
   const notifiData = {
@@ -14,14 +13,12 @@ export const createAddEnemyTowerNotification = (data, otherUsers) => {
   const protoType = PacketType.ADD_ENEMY_TOWER_NOTIFICATION;
 
   const packet = makeNotification(protoType, notifiData);
-
-  otherUsers.forEach((user) => {
+  otherUser.forEach((user) => {
     user.socket.write(packet);
   });
 };
 
 export const createEnemyTowerAttackNotification = (data, otherUser) => {
-  console.log('enemyTowerAttackNotification');
   const { towerId, monsterId } = data;
 
   const notifiData = {
@@ -38,10 +35,3 @@ export const createEnemyTowerAttackNotification = (data, otherUser) => {
     user.socket.write(packet);
   });
 };
-
-/**
- * message S2CEnemyTowerAttackNotification {
-    int32 towerId = 1;
-    int32 monsterId = 2;
-}
-} */

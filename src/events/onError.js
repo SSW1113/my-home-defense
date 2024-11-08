@@ -1,6 +1,4 @@
-import { saveGameLog } from '../db/games/game.db.js';
-import { createGameOverNotification } from '../handlers/game/monster.baseattack.js';
-import { removeGamesession } from '../sessions/game.session.js';
+import { createGameOverNotification, gameEnd } from '../handlers/game/monster.baseattack.js';
 import { getUserBySocket, removeUser } from '../sessions/user.session.js';
 
 export const onError = (socket) => (err) => {
@@ -16,12 +14,7 @@ export const onError = (socket) => (err) => {
       opponentUsers.forEach((user) => {
         user.socket.write(opponentgameOverNotification);
       });
-
-      // db에 게임 로그 저장
-      saveGameLog(user, opponentUsers[0]);
-
-      // 게임이 종료됐으니 게임 세션 삭제
-      removeGamesession(user.gameSession.id);
+      gameEnd(user.gameSession);
     }
 
     removeUser(socket);

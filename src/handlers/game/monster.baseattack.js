@@ -1,5 +1,6 @@
 import { PacketType } from '../../constants/header.js';
 import { saveGameLog } from '../../db/games/game.db.js';
+import { getUserHighscoreById, updateUserHighscore } from '../../db/users/user.db.js';
 import { removeGamesession } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 import { makeNotification } from '../../utils/notification/game.notification.js';
@@ -23,6 +24,8 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
 
     // 공격 받은 유저 기준 적에게 유저의 baseHp 전달
     const gameSession = user.getGameSession();
+    if (!gameSession) return;
+
     // 적이 1명을 넘어 2명 이상이여도 작동하도록 작성
     const opponentUsers = gameSession.getOpponentUser(user.id);
     opponentUsers.forEach((user) => {
@@ -41,16 +44,33 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
       opponentUsers.forEach((user) => {
         user.socket.write(opponentgameOverNotification);
       });
-
-      // db에 게임 로그 저장
-      saveGameLog(user, opponentUsers[0]);
-
-      // 게임이 종료됐으니 게임 세션 삭제
-      removeGamesession(user.gameSession.id);
+      gameEnd(gameSession);
     }
   } catch (err) {
     console.error('monster base attack error: ', err);
   }
+};
+
+export const gameEnd = async (gameSession) => {
+  const users = gameSession.getUsers();
+  const user1 = users[0];
+  const user2 = users[1];
+
+  // DB 처리
+  // db에 게임 로그 저장
+  saveGameLog(user1, user2);
+
+  for (const user of users) {
+    const userHighScore = await getUserHighscoreById(user.id); // await 추가
+    console.log('user score: ', user.score);
+    console.log('userHighScore: ', userHighScore);
+    if (user.score > userHighScore) {
+      await updateUserHighscore(user.id, user.score); // 업데이트 함수도 await
+    }
+  }
+
+  // 게임이 종료됐으니 게임 세션 삭제
+  removeGamesession(gameSession.id);
 };
 
 // GameEndRequest에 관한 핸들러
@@ -59,8 +79,10 @@ export const gameOverHandler = async ({ packetType, data, socket }) => {
   const gameSession = user.getGameSession();
   const gameOverNotification = createGameOverNotification(false);
   socket.write(gameOverNotification);
+
   const opponentgameOverNotification = createGameOverNotification(true);
   const opponentUsers = gameSession.getOpponentUser(user.id);
+
   opponentUsers.forEach((user) => {
     user.socket.write(opponentgameOverNotification);
   });
