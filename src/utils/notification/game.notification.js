@@ -1,4 +1,5 @@
 import { PacketType } from '../../constants/header.js';
+import { initialGameStateData } from '../../init/index.js';
 import { getProtoMessages } from '../../init/loadProto.js';
 import { createHeader } from '../response/createHeader.js';
 import { notificationProto } from './notificationPoroto.js';
@@ -34,7 +35,6 @@ export const makeNotification = (packetType, data) => {
 };
 
 export const createMatchStartNotification = (user, opponent) => {
-  const initialGameStateData = user.gameSession.initialGameState;
 
   const playerGameData = {
     gold: user.gold,

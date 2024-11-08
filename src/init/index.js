@@ -12,3 +12,10 @@ export const initServer = async () => {
     process.exit(1);
   }
 };
+
+export const initialGameStateData = {
+  baseHp: 150,
+  towerCost: 3000,
+  initialGold: 9000,
+  monsterSpawnInterval: 1,
+}

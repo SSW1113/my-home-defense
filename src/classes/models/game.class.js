@@ -8,18 +8,6 @@ class Game {
   constructor(id) {
     this.id = id;
     this.users = [];
-
-    this.initialGameState = this.initState();
-  }
-
-  initState() {
-    const initialGameStateData = {
-      baseHp: 500,
-      towerCost: 500,
-      initialGold: 6000,
-      monsterSpawnInterval: 4000,
-    }
-    return initialGameStateData
   }
 
   addUser(user) {
