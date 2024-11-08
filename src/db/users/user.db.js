@@ -5,7 +5,7 @@ import { toCamelCase } from '../../utils/transformCase.js';
 
 // deviceId 받아서 db에서 유저 정보 조회
 export const findUserById = async (userId) => {
-  const [rows] = await dbPool.USERS_DB.query(SUSER_QL_QUERIES.FIND_USER_BY_ID, [userId]);
+  const [rows] = await dbPool.USERS_DB.query(USER_SQL_QUERIES.FIND_USER_BY_ID, [userId]);
   return toCamelCase(rows[0]);
 };
 
