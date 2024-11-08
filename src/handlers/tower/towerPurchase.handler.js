@@ -19,7 +19,7 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
 
     console.log('타워 구매됨 tower: ', tower);
 
-    user.towers.push(tower);
+    user.addTower(tower); // 타워 추가
 
     let responseData;
 

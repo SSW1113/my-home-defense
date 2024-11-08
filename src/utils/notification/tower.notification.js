@@ -17,7 +17,7 @@ export const createAddEnemyTowerNotification = (data, socket) => {
   socket.write(packet);
 };
 
-export const createEnemyTowerAttackNotification = (data, socket) => {
+export const createEnemyTowerAttackNotification = (data, otherUser) => {
   console.log('enemyTowerAttackNotification');
   const { towerId, monsterId } = data;
 
@@ -29,7 +29,12 @@ export const createEnemyTowerAttackNotification = (data, socket) => {
   const protoType = PacketType.ENEMY_TOWER_ATTACK_NOTIFICATION;
 
   const packet = makeNotification(protoType, notifiData);
-  socket.write(packet);
+
+  // 같은 세션에 있는 다른 유저에게 현재 클라이언트가 공격한 타워정보, 몬스터 정보를 주었습니다. 그래야 다른 클라이언트에서 해당 타워를 공격하게 해줄텐데
+  otherUser.forEach((user) => {
+    user.socket.write(packet);
+  });
+  // 아 지금 각자 알려준 정보를 알려주면서 여러번 그려주는 중 이구만 이런면 안되는데
 };
 
 /**

@@ -56,6 +56,14 @@ class Game {
     const user2Socket = this.users[1].socket;
     user1Socket.write(gameStartPacket);
     user2Socket.write(gameStartPacket);
+    const user1 = this.users[0];
+    const user2 = this.users[1];
+
+    user1.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
+    user2.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
+
+    console.log('------------------------user1 towers: ', user1.towers);
+    console.log('------------------------user2 towers: ', user2.towers);
   }
 
   // 현재 생성한 몬스터 정보를 다른유저에게 알리는 함수

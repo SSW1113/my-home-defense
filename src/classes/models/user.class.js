@@ -11,7 +11,7 @@ class User {
 
     // 게임 데이터
     this.gameSession;
-    this.gold = 500;
+    this.gold = 10000;
     this.base = new Base(100);
     this.towers = [];
     this.monsters = [];
@@ -28,7 +28,7 @@ class User {
   // 게임 데이터 초기화
   initUser() {
     this.gameSession = null;
-    this.gold = 500;
+    this.gold = 10000;
     this.base = new Base(100);
     this.towers = [];
     this.monsters = [];
@@ -66,27 +66,36 @@ class User {
     this.towers.splice(index, 1);
   }
 
+  // 몬스터 경로생성 함수
   generateRandomMonsterPath() {
+    // 게임 화면 특정 크기
+    const minX = 0;
+    const maxX = 1400;
+    const minY = 250;
+    const maxY = 400;
+
+    const pathSize = 60; // 60 x 60 사이즈로 되어있음
+
     const path = [];
-    let currentX = 0;
-    let currentY = Math.floor(Math.random() * 21) + 290; //
+    let currentX = minX;
+    let currentY = Math.floor(Math.random() * 21) + 300; // 300 ~ 320 범위의 y 시작 (캔버스 y축 중간쯤에서 시작할 수 있도록 유도)
 
-    path.push({ x: currentX, y: currentY });
+    path.push({ x: currentX, y: currentY }); // 처음 경로 지정
 
-    while (currentX < 1000) {
-      currentX += Math.floor(Math.random() * 100) + 50; // 50 ~ 150 범위의 x 증가
+    while (currentX < maxX) {
+      currentX += Math.floor(Math.random()) + pathSize; // 0 ~ 60 범위의 x 증가
       // x 좌표에 대한 clamp 처리
-      if (currentX > 1000) {
-        currentX = 1000;
+      if (currentX > maxX) {
+        currentX = maxX;
       }
 
-      currentY += Math.floor(Math.random() * 100) - 50; // -50 ~ 50 범위의 y 변경
+      currentY += Math.floor(Math.random() * (pathSize * 2)) - pathSize; // -60 ~ 60 범위의 y 변경
       // y 좌표에 대한 clamp 처리
-      if (currentY < 0) {
-        currentY = 0;
+      if (currentY < minY) {
+        currentY = minY;
       }
-      if (currentY > 1000) {
-        currentY = 1000;
+      if (currentY > maxY) {
+        currentY = maxY;
       }
 
       path.push({ x: currentX, y: currentY });
@@ -95,7 +104,7 @@ class User {
     return path;
   }
 
-  createMonster(monster) {
+  addMonster(monster) {
     this.monsters.push(monster);
   }
 
