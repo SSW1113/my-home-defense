@@ -5,8 +5,6 @@ class User {
     this.socket = socket;
     this.id = id;
     this.sequence = 0;
-    this.towers = [];
-    this.monsters = [];
     this.gameSession;
 
     this.isWin = false;
@@ -71,7 +69,7 @@ class User {
   generateRandomMonsterPath() {
     const path = [];
     let currentX = 0;
-    let currentY = Math.floor(Math.random() * 21) + 290; // 
+    let currentY = Math.floor(Math.random() * 21) + 290; //
 
     path.push({ x: currentX, y: currentY });
 
