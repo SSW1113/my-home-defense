@@ -1,4 +1,8 @@
-import { createMatchStartNotification } from "../../utils/notification/game.notification.js";
+import {
+  createMatchStartNotification,
+  makeNotification,
+} from '../../utils/notification/game.notification.js';
+import { PacketType } from '../../constants/header.js';
 
 class Game {
   constructor(id) {
@@ -10,7 +14,7 @@ class Game {
       towerCost: 2,
       initialGold: 3,
       monsterSpawnInterval: 4,
-    }
+    };
   }
 
   addUser(user) {
@@ -22,8 +26,17 @@ class Game {
     }
   }
 
-  getUser(userId) {
+  getUserById(userId) {
     return this.users.find((user) => user.id === userId);
+  }
+
+  getUserBySocket(socket) {
+    return this.users.find((user) => user.socket === socket);
+  }
+
+  // 게임의 users에서 입력받은 유저가 아닌 상대 유저를 받아옴
+  getOpponentUser(userId) {
+    return this.users.filter((user) => user.id !== userId);
   }
 
   removeUser(socket) {
@@ -45,28 +58,63 @@ class Game {
     user2Socket.write(gameStartPacket);
   }
 
+  // 현재 생성한 몬스터 정보를 다른유저에게 알리는 함수
+  getAllSpawnEnemyMonster(userId, monster) {
+    this.users
+      .filter((user) => user.id !== userId)
+      .forEach((otherUser) => {
+        const monsterData = {
+          monsterId: monster.id,
+          monsterNumber: monster.monsterNumber,
+        };
+
+        const notification = makeNotification(
+          PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
+          monsterData,
+        );
+
+        otherUser.socket.write(notification); // 다른 유저에게 새 몬스터 정보 알림 // 제발
+      });
+  }
+
+  // 이거는 자기 몬스터 상황을 다른 유저들에게 알리는 함수
+  notifyEnemyMonsterDeath(userId, monsterId) {
+    const notification = makeNotification(PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION, {
+      monsterId,
+    });
+
+    this.users
+      .filter((user) => user.id !== userId)
+      .forEach((otherUser) => otherUser.socket.write(notification)); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
+  }
+
+  //  message S2CStateSyncNotification {
+  //   int32 userGold = 1;
+  //   int32 baseHp = 2;
+  //   int32 monsterLevel = 3;
+  //   int32 score = 4;
+  //   repeated TowerData towers = 5;
+  //   repeated MonsterData monsters = 6;
+  // }
+
+  // 상태동기화 (?)
+  getAllState(userId) {
+    const stateData = this.users
+      .filter((user) => user.id === userId)
+      .map((user) => {
+        return {
+          userGold: user.gold,
+          baseHp: user.base.hp,
+          monsterLevel: user.monsterLevel,
+          score: user.score,
+          towers: user.towers,
+          monsters: user.monsters,
+        };
+      });
+    console.log(' id : ', userId, stateData);
+    const protoType = PacketType.STATE_SYNC_NOTIFICATION;
+    return makeNotification(protoType, stateData);
+  }
 }
 
 export default Game;
-
-
-
-// message GameState {
-//   int32 gold = 1;
-//   BaseData base = 2;
-//   int32 highScore = 3;
-//   repeated TowerData towers = 4;
-//   repeated MonsterData monsters = 5;
-//   int32 monsterLevel = 6;
-//   int32 score = 7;
-//   repeated Position monsterPath = 8;
-//   Position basePosition = 9;
-// }
-
-// message InitialGameState {
-//   int32 baseHp = 1;
-//   int32 towerCost = 2;
-//   int32 initialGold = 3;
-//   int32 monsterSpawnInterval = 4;
-// }
-

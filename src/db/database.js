@@ -2,9 +2,9 @@ import mysql from 'mysql2/promise';
 import { config } from '../config/config.js';
 import { formatDate } from '../utils/dateFormatter.js';
 
-const createPool = () => {
+const createPool = (dbInfo) => {
   const pool = mysql.createPool({
-    ...config.database,
+    ...dbInfo,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
@@ -26,7 +26,8 @@ const createPool = () => {
 };
 
 const dbPool = {
-  USERS_DB: createPool(),
+  USERS_DB: createPool(config.userDatabase),
+  GAMES_DB: createPool(config.gameDatabase),
 };
 
 export default dbPool;

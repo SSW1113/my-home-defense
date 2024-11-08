@@ -9,17 +9,19 @@ export const addGameSession = (gameId) => {
 
 export const getGameSessionById = (gameId) => {
   return gameSessions.find((game) => game.id === gameId);
-}
+};
 
 export const removeGamesession = (gameId) => {
   const index = gameSessions.findIndex((game) => game.id === gameId);
   if (index !== -1) {
-    return gameSessions.splice(index, 1)[0];
+    const gameSession = gameSessions.splice(index, 1)[0];
+    gameSession.users.forEach((user) => {
+      user.initUser();
+    });
+    return gameSession;
   }
-}
+};
 
 export const findMatchingGameSession = () => {
-  return gameSessions.find((gameSession) =>
-    gameSession.users.length <= 1,
-  )
-}
+  return gameSessions.find((gameSession) => gameSession.users.length <= 1);
+};
