@@ -46,7 +46,7 @@ export const onData = (socket) => async (data) => {
       if (sequence !== client.getSequence()) {
         console.log(sequence);
         console.log(client.getSequence());
-        throw new Error('클라이언트 버전이 일치하지 않습니다.');
+        throw new Error('시퀀스 번호가 일치하지 않습니다.');
       }
 
       // 페이로드 길이
