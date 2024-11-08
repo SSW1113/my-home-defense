@@ -9,15 +9,15 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
   try {
     const { x, y } = data;
     const user = getUserBySocket(socket);
-    const towerId = uuidv4();
 
     if (!user) {
       throw Error(); // 유저가 존재하지 않음
     }
 
-    const tower = new Tower(towerId, x, y);
+    const tower = new Tower(x, y);
+    const towerId = tower.id;
 
-    console.log('tower: ', tower);
+    console.log('타워 구매됨 tower: ', tower);
 
     user.towers.push(tower);
 
