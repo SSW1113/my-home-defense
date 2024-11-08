@@ -5,6 +5,9 @@ class User {
     this.socket = socket;
     this.id = id;
     this.sequence = 0;
+    this.gameSession;
+
+    this.isWin = false;
 
     // 게임 데이터
     this.gameSession;
@@ -38,36 +41,35 @@ class User {
       y: this.monsterPath[this.monsterPath.length - 1].y,
     };
   }
-
   setGameSession(gameSession) {
     this.gameSession = gameSession;
   }
+
   getGameSession() {
     return this.gameSession;
   }
-
-  /*
-  message GameState {
-    int32 gold = 1;
-    BaseData base = 2;
-    int32 highScore = 3;
-    repeated TowerData towers = 4;
-    repeated MonsterData monsters = 5;
-    int32 monsterLevel = 6;
-    int32 score = 7;
-    repeated Position monsterPath = 8;
-    Position basePosition = 9;
-  }
-  */
 
   getNextSequence() {
     return ++this.sequence;
   }
 
+  addTower(tower) {
+    this.towers.push(tower);
+  }
+
+  getTower(id) {
+    return this.towers.find((tower) => tower.id === id);
+  }
+
+  removeTower(id) {
+    const index = this.towers.findIndex((tower) => tower.id === id);
+    this.towers.splice(index, 1);
+  }
+
   generateRandomMonsterPath() {
     const path = [];
     let currentX = 0;
-    let currentY = Math.floor(Math.random() * 21) + 500; // 500 ~ 520 범위의 y 시작 (캔버스 y축 중간쯤에서 시작할 수 있도록 유도)
+    let currentY = Math.floor(Math.random() * 21) + 290; //
 
     path.push({ x: currentX, y: currentY });
 

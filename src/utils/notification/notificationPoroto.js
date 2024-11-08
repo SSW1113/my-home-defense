@@ -5,6 +5,22 @@ export const notificationProto = {
     protoType: 'gameNotification.S2CMatchStartNotification',
     fieldName: 'matchStartNotification',
   },
+  [PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION]: {
+    protoType: 'gameNotification.S2CSpawnEnemyMonsterNotification',
+    fieldName: 'spawnEnemyMonsterNotification',
+  },
+  [PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION]: {
+    protoType: 'gameNotification.S2CEnemyMonsterDeathNotification',
+    fieldName: 'enemyMonsterDeathNotification',
+  },
+  [PacketType.STATE_SYNC_NOTIFICATION]: {
+    protoType: 'gameNotification.S2CStateSyncNotification',
+    fieldName: 'stateSyncNotification',
+  },
+  [PacketType.ADD_ENEMY_TOWER_NOTIFICATION]: {
+    protoType: 'gameNotification.S2CAddEnemyTowerNotification',
+    fieldName: 'addEnemyTowerNotification',
+  },
   [PacketType.UPDATE_BASE_HP_NOTIFICATION]: {
     protoType: 'gameNotification.S2CUpdateBaseHPNotification',
     fieldName: 'updateBaseHpNotification',

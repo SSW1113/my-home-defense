@@ -1,7 +1,8 @@
-import { createMatchStartNotification } from '../../utils/notification/game.notification.js';
-
+import {
+  createMatchStartNotification,
+  makeNotification,
+} from '../../utils/notification/game.notification.js';
 import { PacketType } from '../../constants/header.js';
-import { createResponse } from '../../utils/response/createRespose.js';
 
 class Game {
   constructor(id) {
@@ -57,34 +58,62 @@ class Game {
     user2Socket.write(gameStartPacket);
   }
 
-  // 아마 이게 맞을것 같은데
-  getAllSpawnEnemyMonster(userId) {
-    const user = this.users.find((user) => user.id === userId);
-
-    // 다른 유저의 몬스터 정보를 찾고 전달해주기 // 그러면 일단 각 유저들이 몬스터를 생성한 후에 실행해 줘야 맞겠는데
+  // 현재 생성한 몬스터 정보를 다른유저에게 알리는 함수
+  getAllSpawnEnemyMonster(userId, monster) {
     this.users
       .filter((user) => user.id !== userId)
       .forEach((otherUser) => {
-        const lastIndex = otherUser.monsters.length - 1;
         const monsterData = {
-          monsterId: otherUser.monsters[lastIndex].id,
-          monsterNumber: otherUser.monsters[lastIndex].monsterNumber,
+          monsterId: monster.id,
+          monsterNumber: monster.monsterNumber,
         };
-        const notification = createResponse(
+
+        const notification = makeNotification(
           PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
           monsterData,
         );
-        user.socket.write(notification); // 자기 자신에게 정보 전달
+
+        otherUser.socket.write(notification); // 다른 유저에게 새 몬스터 정보 알림 // 제발
       });
   }
 
   // 이거는 자기 몬스터 상황을 다른 유저들에게 알리는 함수
   notifyEnemyMonsterDeath(userId, monsterId) {
-    const notification = createResponse(PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION, { monsterId });
+    const notification = makeNotification(PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION, {
+      monsterId,
+    });
 
     this.users
       .filter((user) => user.id !== userId)
       .forEach((otherUser) => otherUser.socket.write(notification)); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
+  }
+
+  //  message S2CStateSyncNotification {
+  //   int32 userGold = 1;
+  //   int32 baseHp = 2;
+  //   int32 monsterLevel = 3;
+  //   int32 score = 4;
+  //   repeated TowerData towers = 5;
+  //   repeated MonsterData monsters = 6;
+  // }
+
+  // 상태동기화 (?)
+  getAllState(userId) {
+    const stateData = this.users
+      .filter((user) => user.id === userId)
+      .map((user) => {
+        return {
+          userGold: user.gold,
+          baseHp: user.base.hp,
+          monsterLevel: user.monsterLevel,
+          score: user.score,
+          towers: user.towers,
+          monsters: user.monsters,
+        };
+      });
+    console.log(' id : ', userId, stateData);
+    const protoType = PacketType.STATE_SYNC_NOTIFICATION;
+    return makeNotification(protoType, stateData);
   }
 }
 

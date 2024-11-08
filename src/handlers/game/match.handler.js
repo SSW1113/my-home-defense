@@ -2,7 +2,6 @@ import { addGameSession, findMatchingGameSession } from '../../sessions/game.ses
 import CustomError from '../../utils/error/customError.js';
 import { v4 as uuidv4 } from 'uuid';
 import { getUserBySocket } from '../../sessions/user.session.js';
-import { gameSessions } from '../../sessions/sessions.js';
 
 export const matchStartHandler = async ({ packetType, data, socket }) => {
   try {
@@ -20,17 +19,13 @@ export const matchStartHandler = async ({ packetType, data, socket }) => {
       console.log('게임 세션 새로 생성', gameSession);
     } else {
       console.log('게임 세션 발견', gameSession);
-      // 3. 있으면 게임 세션에 (지금 매치 돌린) 유저를 넣는다
-      gameSession.addUser(user);
     }
+
+    // 유저의 세션 세팅
+    user.setGameSession(gameSession);
 
     // 게임 세션에 유저 추가
     gameSession.addUser(user);
-
-    console.log(user.getGameSession());
-    user.setGameSession(gameSession);
-
-    console.log('userGameSessiondkdkdkkdk', user.getGameSession());
   } catch (e) {
     console.error(e);
   }
