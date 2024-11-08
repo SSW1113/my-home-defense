@@ -29,7 +29,7 @@ export const towerAttackHandler = async ({ packetType, data, socket }) => {
 
     const otherUser = gameSession.users.filter((user) => user.id !== currentUser.id);
 
-    createEnemyTowerAttackNotification(data, otherUsers);
+    createEnemyTowerAttackNotification(data, otherUser);
   } catch (e) {
     console.error(e);
   }
