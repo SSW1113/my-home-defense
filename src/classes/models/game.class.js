@@ -1,7 +1,8 @@
-import { createMatchStartNotification } from '../../utils/notification/game.notification.js';
-
+import {
+  createMatchStartNotification,
+  makeNotification,
+} from '../../utils/notification/game.notification.js';
 import { PacketType } from '../../constants/header.js';
-import { createResponse } from '../../utils/response/createRespose.js';
 
 class Game {
   constructor(id) {
@@ -62,7 +63,7 @@ class Game {
           monsterNumber: monster.monsterNumber,
         };
 
-        const notification = createResponse(
+        const notification = makeNotification(
           PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
           monsterData,
         );
@@ -73,7 +74,9 @@ class Game {
 
   // 이거는 자기 몬스터 상황을 다른 유저들에게 알리는 함수
   notifyEnemyMonsterDeath(userId, monsterId) {
-    const notification = createResponse(PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION, { monsterId });
+    const notification = makeNotification(PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION, {
+      monsterId,
+    });
 
     this.users
       .filter((user) => user.id !== userId)
