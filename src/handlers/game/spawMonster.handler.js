@@ -25,7 +25,11 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
       monsterNumber: monster.monsterNumber,
     };
 
-    const spawnMonsterResponse = createResponse(PacketType.SPAWN_MONSTER_RESPONSE, responseData);
+    const spawnMonsterResponse = createResponse(
+      PacketType.SPAWN_MONSTER_RESPONSE,
+      responseData,
+      socket,
+    );
 
     socket.write(spawnMonsterResponse);
 
