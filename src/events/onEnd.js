@@ -1,5 +1,4 @@
 import { createGameOverNotification, gameEnd } from '../handlers/game/monster.baseattack.js';
-import { createGameOverNotification } from '../handlers/game/monster.baseattack.js';
 import { removeClient } from '../sessions/client.session.js';
 import { getUserBySocket, removeUser } from '../sessions/user.session.js';
 

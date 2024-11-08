@@ -15,7 +15,7 @@ export const createAddEnemyTowerNotification = (data, otherUser) => {
 
   const packet = makeNotification(protoType, notifiData);
 
-  otherUsers.forEach((user) => {
+  otherUser.forEach((user) => {
     user.socket.write(packet);
   });
 };
