@@ -126,6 +126,11 @@ class User {
     this.base.hp -= dmg;
     return this.base.hp;
   }
+
+  getTower(towerId) {
+    const tower = this.towers.find((tower) => tower.id === towerId);
+    return tower;
+  }
 }
 
 export default User;

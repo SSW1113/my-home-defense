@@ -6,6 +6,7 @@ import { matchStartHandler } from './game/match.handler.js';
 import { gameOverHandler, monsterBaseAttackHandler } from './game/monster.baseattack.js';
 import { spawnMonsterHandler } from './game/spawMonster.handler.js';
 import { monsterDeathNotifyHandler } from './game/monsterDeath.handler.js';
+import { towerAttackHandler } from './tower/towerAttack.handler.js';
 
 const handlers = {
   [PacketType.REGISTER_REQUEST]: {
@@ -39,6 +40,10 @@ const handlers = {
   [PacketType.GAME_END_REQUEST]: {
     handler: gameOverHandler,
     protoType: 'request.C2SGameEndRequest',
+  },
+  [PacketType.TOWER_ATTACK_REQUEST]: {
+    handler: towerAttackHandler,
+    protoType: 'request.C2STowerAttackRequest',
   },
 };
 
