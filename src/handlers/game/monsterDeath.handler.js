@@ -18,16 +18,21 @@ export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) =>
     const monster = user.getMonster(monsterId); // 저장된 몬스터 조회
 
     if (!monster) {
+      console.log(monster);
+      console.log(user.monster);
       throw new Error('몬스터 정보가 존재하지 않습니다.');
     }
     // 해당 몬스터 세션에 저장된 정보 삭제
     user.removeMonster(monsterId);
 
+    user.score += 100;
+    user.gold += 100;
+
     // 이제 다른 유저에게 나의 몬스터상황 알려주기 // 이게 맞기를
     gameSession.notifyEnemyMonsterDeath(user.id, monsterId);
 
-    const packet = gameSession.getAllState(user.id);
-    socket.write(packet);
+    //user.getAllState();
+    gameSession.getAllState(user.id);
   } catch (e) {
     console.error(e);
     // handlerError(socket, e);

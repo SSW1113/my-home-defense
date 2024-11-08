@@ -17,8 +17,8 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
     }
 
     // 세션 저장
-    const monster = new Monster(); // 몬스터 생성시 레벨생각해보기 TODO
-    user.createMonster(monster); // 유저에 몬스터 정보 추가
+    const monster = new Monster(); // 유저에 몬스터 생성 및 정보 추가
+    user.addMonster(monster);
 
     const responseData = {
       monsterId: monster.id,
@@ -29,8 +29,6 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
 
     socket.write(spawnMonsterResponse);
 
-    const packet = gameSession.getAllState(user.id);
-    socket.write(packet);
     // 내가 생성한 몬스터 정보 다른 상대(클라)에게 알려주기
     gameSession.getAllSpawnEnemyMonster(user.id, monster);
   } catch (e) {
