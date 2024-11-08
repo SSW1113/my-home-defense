@@ -1,7 +1,7 @@
 import { PacketType } from '../../constants/header.js';
 import { makeNotification } from './game.notification.js';
 
-export const createAddEnemyTowerNotification = (data, otherUsers) => {
+export const createAddEnemyTowerNotification = (data, otherUser) => {
   console.log('addEnemyTowerNotification');
   const { towerId, x, y } = data;
 
@@ -21,7 +21,6 @@ export const createAddEnemyTowerNotification = (data, otherUsers) => {
 };
 
 export const createEnemyTowerAttackNotification = (data, otherUser) => {
-  console.log('enemyTowerAttackNotification');
   const { towerId, monsterId } = data;
 
   const notifiData = {

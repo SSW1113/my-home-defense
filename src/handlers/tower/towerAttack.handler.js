@@ -2,7 +2,7 @@ import { getGameSessionById } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 import { createEnemyTowerAttackNotification } from '../../utils/notification/tower.notification.js';
 
-export const towerAttackHandler = async ({ data, socket }) => {
+export const towerAttackHandler = async ({ packetType, data, socket }) => {
   try {
     const { towerId, monsterId } = data;
     console.log('towerId , monsterId', towerId, monsterId);
@@ -26,17 +26,11 @@ export const towerAttackHandler = async ({ data, socket }) => {
     }
 
     const gameSession = getGameSessionById(currentUser.getGameSession().id);
-    const otherUsers = gameSession.users.filter((user) => user.id !== currentUser.id);
+
+    const otherUser = gameSession.users.filter((user) => user.id !== currentUser.id);
 
     createEnemyTowerAttackNotification(data, otherUsers);
   } catch (e) {
     console.error(e);
   }
 };
-
-/**
- * message C2STowerAttackRequest {
-    int32 towerId = 1;
-    int32 monsterId = 2;
-}
- */

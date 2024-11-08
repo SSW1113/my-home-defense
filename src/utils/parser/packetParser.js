@@ -18,14 +18,14 @@ export const packetParser = (packetType, data) => {
     const payloadField = GamePacket.oneofs['payload'].oneof.find(
       (field) => gamePacket[field] != null,
     );
-    console.log('payloadField: ', payloadField);
+    // console.log('payloadField: ', payloadField);
     if (!payloadField) {
       throw new Error('No valid payload field found in GamePacket');
     }
 
     const protoTypeName = getProtoTypeNameByPacketType(packetType);
     const payload = gamePacket[payloadField];
-    console.log('payload: ', payload);
+    // console.log('payload: ', payload);
 
     // const payloadType = GamePacket[]
     // const [namespace, packetName, typeName] = protoTypeName.split('.');
@@ -38,9 +38,9 @@ export const packetParser = (packetType, data) => {
     const expectedFields = Object.keys(expectedProto.fields);
     const actualFields = Object.keys(payload);
     const missingField = expectedFields.filter((field) => !actualFields.includes(field));
-    console.log('expectedFields: ', expectedFields);
-    console.log('actualFields: ', actualFields);
-    console.log('missingField: ', missingField);
+    // console.log('expectedFields: ', expectedFields);
+    // console.log('actualFields: ', actualFields);
+    // console.log('missingField: ', missingField);
     if (missingField > 0) {
       throw Error();
     }
