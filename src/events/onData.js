@@ -44,8 +44,6 @@ export const onData = (socket) => async (data) => {
 
       // 시퀀스 체크
       if (sequence !== client.getSequence()) {
-        console.log(sequence);
-        console.log(client.getSequence());
         throw new Error('시퀀스 번호가 일치하지 않습니다.');
       }
 
