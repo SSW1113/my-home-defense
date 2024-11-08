@@ -1,4 +1,6 @@
 import Base from './base.class.js';
+import Monster from './monster.class.js';
+import Tower from './tower.class.js';
 
 class User {
   constructor(socket, id) {
@@ -144,11 +146,11 @@ class User {
       score: this.score,
       towers: this.towers,
       monsters: this.monsters,
-    }
+    };
 
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
     const packet = makeNotification(protoType, stateData);
-    this.socket.write(packet)
+    this.socket.write(packet);
   }
   getTower(towerId) {
     const tower = this.towers.find((tower) => tower.id === towerId);

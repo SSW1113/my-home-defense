@@ -1,8 +1,7 @@
 import { PacketType } from '../../constants/header.js';
 import { makeNotification } from './game.notification.js';
 
-export const createAddEnemyTowerNotification = (data, socket) => {
-  console.log('addEnemyTowerNotification');
+export const createAddEnemyTowerNotification = (data, otherUser) => {
   const { towerId, x, y } = data;
 
   const notifiData = {
@@ -14,11 +13,12 @@ export const createAddEnemyTowerNotification = (data, socket) => {
   const protoType = PacketType.ADD_ENEMY_TOWER_NOTIFICATION;
 
   const packet = makeNotification(protoType, notifiData);
-  socket.write(packet);
+  otherUser.forEach((user) => {
+    user.socket.write(packet);
+  });
 };
 
 export const createEnemyTowerAttackNotification = (data, otherUser) => {
-  console.log('enemyTowerAttackNotification');
   const { towerId, monsterId } = data;
 
   const notifiData = {
@@ -34,12 +34,4 @@ export const createEnemyTowerAttackNotification = (data, otherUser) => {
   otherUser.forEach((user) => {
     user.socket.write(packet);
   });
-  // 아 지금 각자 알려준 정보를 알려주면서 여러번 그려주는 중 이구만 이런면 안되는데
 };
-
-/**
- * message S2CEnemyTowerAttackNotification {
-    int32 towerId = 1;
-    int32 monsterId = 2;
-}
-} */

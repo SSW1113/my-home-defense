@@ -22,29 +22,32 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
     // 공격 받은 유저의 데이터 baseHp를 유저에게 전달
     socket.write(userNotificationData);
 
-  // 공격 받은 유저 기준 적에게 유저의 baseHp 전달
-  const gameSession = user.getGameSession();
-  if (!gameSession) return;
+    // 공격 받은 유저 기준 적에게 유저의 baseHp 전달
+    const gameSession = user.getGameSession();
+    if (!gameSession) return;
 
-  // 적이 1명을 넘어 2명 이상이여도 작동하도록 작성
-  const opponentUsers = gameSession.getOpponentUser(user.id);
-  opponentUsers.forEach((user) => {
-    user.socket.write(opponentNotificationData);
-  });
-
-  // 게임 종료
-  if (baseHp <= 0) {
-    // 게임 종료 notification 전송 (패배)
-    const gameOverNotification = createGameOverNotification(false);
-    socket.write(gameOverNotification);
-
-    // 적들에게 게임 종료 notification 생성 및 전송 (승리)
-    const opponentgameOverNotification = createGameOverNotification(true);
+    // 적이 1명을 넘어 2명 이상이여도 작동하도록 작성
     const opponentUsers = gameSession.getOpponentUser(user.id);
     opponentUsers.forEach((user) => {
       user.socket.write(opponentNotificationData);
     });
-    gameEnd(gameSession);
+
+    // 게임 종료
+    if (baseHp <= 0) {
+      // 게임 종료 notification 전송 (패배)
+      const gameOverNotification = createGameOverNotification(false);
+      socket.write(gameOverNotification);
+
+      // 적들에게 게임 종료 notification 생성 및 전송 (승리)
+      const opponentgameOverNotification = createGameOverNotification(true);
+      const opponentUsers = gameSession.getOpponentUser(user.id);
+      opponentUsers.forEach((user) => {
+        user.socket.write(opponentgameOverNotification);
+      });
+      gameEnd(gameSession);
+    }
+  } catch (err) {
+    console.error('monster base attack error: ', err);
   }
 };
 
@@ -61,7 +64,6 @@ export const gameEnd = async (gameSession) => {
     const userHighScore = await getUserHighscoreById(user.id); // await 추가
     console.log('user score: ', user.score);
     console.log('userHighScore: ', userHighScore);
-    
     if (user.score > userHighScore) {
       await updateUserHighscore(user.id, user.score); // 업데이트 함수도 await
     }

@@ -8,9 +8,9 @@ import { getGameSessionById } from '../../sessions/game.session.js';
 export const towerPurchaseHandler = async ({ data, socket }) => {
   try {
     const { x, y } = data;
-    const user = getUserBySocket(socket);
+    const currentUser = getUserBySocket(socket);
 
-    if (!user) {
+    if (!currentUser) {
       throw Error(); // 유저가 존재하지 않음
     }
 
@@ -19,26 +19,22 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
 
     console.log('타워 구매됨 tower: ', tower);
 
-    user.addTower(tower); // 타워 추가
-
-    let responseData;
+    currentUser.addTower(tower); // 타워 추가
 
     // 돈 검증
-    const gameSession = getGameSessionById(user.getGameSession().id);
-    if (user.gold < gameSession.initialGameState.towerCost) {
-      responseData = {
-        towerId: undefined, // 이게 맞나
-      };
-    } else {
-      responseData = {
-        towerId: towerId,
-      };
-      const towerData = { towerId, x, y };
-      createAddEnemyTowerNotification(towerData, socket);
-    }
+    const gameSession = getGameSessionById(currentUser.getGameSession().id);
+
+    const responseData = {
+      towerId: towerId,
+    };
 
     const towerPurchaseResponse = createResponse(PacketType.TOWER_PURCHASE_RESPONSE, responseData);
     socket.write(towerPurchaseResponse);
+
+    const otherUsers = gameSession.users.filter((user) => user.id !== currentUser.id);
+
+    const towerData = { towerId, x, y };
+    createAddEnemyTowerNotification(towerData, otherUsers);
   } catch (e) {
     console.error('Tower purchase handler error: ', e);
   }

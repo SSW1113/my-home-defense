@@ -56,31 +56,19 @@ class Game {
     const user2Socket = this.users[1].socket;
     user1Socket.write(gameStartPacket);
     user2Socket.write(gameStartPacket);
-    const user1 = this.users[0];
-    const user2 = this.users[1];
-
-    user1.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
-    user2.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
-
-    console.log('------------------------user1 towers: ', user1.towers);
-    console.log('------------------------user2 towers: ', user2.towers);
   }
 
   // 현재 생성한 몬스터 정보를 다른유저에게 알리는 함수
   getAllSpawnEnemyMonster(userId, monster) {
+    const monsterData = {
+      monsterId: monster.id,
+      monsterNumber: monster.monsterNumber,
+    };
+    const notification = makeNotification(PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION, monsterData);
+
     this.users
       .filter((user) => user.id !== userId)
       .forEach((otherUser) => {
-        const monsterData = {
-          monsterId: monster.id,
-          monsterNumber: monster.monsterNumber,
-        };
-
-        const notification = makeNotification(
-          PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
-          monsterData,
-        );
-
         otherUser.socket.write(notification); // 다른 유저에게 새 몬스터 정보 알림 // 제발
       });
   }
@@ -96,16 +84,7 @@ class Game {
       .forEach((otherUser) => otherUser.socket.write(notification)); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
   }
 
-  //  message S2CStateSyncNotification {
-  //   int32 userGold = 1;
-  //   int32 baseHp = 2;
-  //   int32 monsterLevel = 3;
-  //   int32 score = 4;
-  //   repeated TowerData towers = 5;
-  //   repeated MonsterData monsters = 6;
-  // }
-
-  // 상태동기화 (?)
+  // 상태동기화
   getAllState(userId) {
     const user = this.getUserById(userId);
     const stateData = {
@@ -115,11 +94,11 @@ class Game {
       score: user.score,
       towers: user.towers,
       monsters: user.monsters,
-    }
+    };
     console.log('id: ', userId, 'state: ', stateData);
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
     const packet = makeNotification(protoType, stateData);
-    user.socket.write(packet)
+    user.socket.write(packet);
   }
 }
 
