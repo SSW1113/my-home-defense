@@ -20,4 +20,16 @@ export const updateUserLogin = async (id) => {
   await dbPool.USERS_DB.query(USER_SQL_QUERIES.UPDATE_USER_LOGIN, [id]);
 };
 
+// 유저의 하이스코어 검색
+export const getUserHighscoreById = async (userId) => {
+  const [rows] = await dbPool.USERS_DB.query(USER_SQL_QUERIES.FIND_HIGHSCORE_BY_ID, [userId]);
+  const result = toCamelCase(rows[0]);
+  return result.highscore;
+};
+
+// 하이스코어 업데이트
+export const updateUserHighscore = async (userId, score) => {
+  await dbPool.USERS_DB.query(USER_SQL_QUERIES.UPDATE_USER_HIGHSCORE, [score, userId]);
+};
+
 export const findUserPasswordById = async (id) => {};
