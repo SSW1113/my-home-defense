@@ -61,26 +61,19 @@ class Game {
 
     user1.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
     user2.towers.push({ id: 1, x: 500, y: 320 }, { id: 2, x: 600, y: 300 });
-
-    console.log('------------------------user1 towers: ', user1.towers);
-    console.log('------------------------user2 towers: ', user2.towers);
   }
 
   // 현재 생성한 몬스터 정보를 다른유저에게 알리는 함수
   getAllSpawnEnemyMonster(userId, monster) {
+    const monsterData = {
+      monsterId: monster.id,
+      monsterNumber: monster.monsterNumber,
+    };
+    const notification = makeNotification(PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION, monsterData);
+
     this.users
       .filter((user) => user.id !== userId)
       .forEach((otherUser) => {
-        const monsterData = {
-          monsterId: monster.id,
-          monsterNumber: monster.monsterNumber,
-        };
-
-        const notification = makeNotification(
-          PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
-          monsterData,
-        );
-
         otherUser.socket.write(notification); // 다른 유저에게 새 몬스터 정보 알림 // 제발
       });
   }
@@ -115,11 +108,11 @@ class Game {
       score: user.score,
       towers: user.towers,
       monsters: user.monsters,
-    }
+    };
     console.log('id: ', userId, 'state: ', stateData);
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
     const packet = makeNotification(protoType, stateData);
-    user.socket.write(packet)
+    user.socket.write(packet);
   }
 }
 

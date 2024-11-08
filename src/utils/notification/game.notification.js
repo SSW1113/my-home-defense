@@ -53,8 +53,8 @@ export const createMatchStartNotification = () => {
     base: { hp: 500, maxHp: 500 }, // BaseData
     highScore: 100,
     towers: [
-      { towerId: 1, x: 500, y: 320 },
-      { towerId: 2, x: 600, y: 300 },
+      // { towerId: 1, x: 500, y: 320 },
+      // { towerId: 2, x: 600, y: 300 },
     ], // repeated TowerData
     monsters: [], // repeated MonsterData
     monsterLevel: 1,
@@ -75,8 +75,8 @@ export const createMatchStartNotification = () => {
     base: { hp: 500, maxHp: 500 }, // BaseData
     highScore: 100,
     towers: [
-      { towerId: 1, x: 500, y: 320 },
-      { towerId: 2, x: 600, y: 300 },
+      // { towerId: 1, x: 500, y: 320 },
+      // { towerId: 2, x: 600, y: 300 },
     ], // repeated TowerData
     monsters: [], // repeated MonsterData
     monsterLevel: 1,
