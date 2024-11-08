@@ -9,12 +9,17 @@ class Game {
     this.id = id;
     this.users = [];
 
-    this.initialGameState = {
-      baseHp: 1,
-      towerCost: 2,
-      initialGold: 3,
-      monsterSpawnInterval: 4,
-    };
+    this.initialGameState = this.initState();
+  }
+
+  initState() {
+    const initialGameStateData = {
+      baseHp: 500,
+      towerCost: 500,
+      initialGold: 6000,
+      monsterSpawnInterval: 4000,
+    }
+    return initialGameStateData
   }
 
   addUser(user) {
@@ -96,7 +101,7 @@ class Game {
       towers: user.towers,
       monsters: user.monsters,
     };
-    console.log('id: ', userId, 'state: ', stateData);
+    //console.log('id: ', userId, 'state: ', stateData);
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
     const packet = makeNotification(protoType, stateData);
     user.socket.write(packet);

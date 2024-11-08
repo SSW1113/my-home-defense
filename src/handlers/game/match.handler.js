@@ -16,9 +16,9 @@ export const matchStartHandler = async ({ packetType, data, socket }) => {
       const gameId = `Game${gameid}`;
       // 게임 세션 생성
       gameSession = addGameSession(gameId);
-      console.log('게임 세션 새로 생성', gameSession);
+      console.log('게임 세션 새로 생성');
     } else {
-      console.log('게임 세션 발견', gameSession);
+      console.log('게임 세션 발견');
     }
 
     // 유저의 세션 세팅
