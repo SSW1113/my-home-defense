@@ -1,4 +1,5 @@
 import { PacketType } from '../../constants/header.js';
+import { saveGameLog } from '../../db/games/game.db.js';
 import { removeGamesession } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 import { makeNotification } from '../../utils/notification/game.notification.js';
@@ -39,6 +40,9 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
     opponentUsers.forEach((user) => {
       user.socket.write(opponentgameOverNotification);
     });
+
+    // db에 게임 로그 저장
+    saveGameLog(user, opponentUsers[0]);
 
     // 게임이 종료됐으니 게임 세션 삭제
     removeGamesession(user.gameSession.id);
