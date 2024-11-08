@@ -17,6 +17,8 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
     const tower = new Tower(x, y);
     const towerId = tower.id;
 
+    currentUser.gold -= 3000;
+
     console.log('타워 구매됨 tower: ', tower);
 
     currentUser.addTower(tower); // 타워 추가

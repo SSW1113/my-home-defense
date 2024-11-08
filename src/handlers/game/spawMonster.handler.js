@@ -11,7 +11,7 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
       throw new Error('해당 유저가 존재하지 않습니다.');
     }
 
-    const gameSession = getGameSessionById(user.getGameSession().id); // 게임 세션 조회
+    const gameSession = user.getGameSession(); // 게임 세션 조회
     if (!gameSession) {
       throw new Error('해당 게임 세션이 존재하지 않습니다.');
     }
