@@ -1,9 +1,9 @@
 import {
-  DB_HOST,
-  DB_NAME,
-  DB_PASSWORD,
-  DB_PORT,
-  DB_USER,
+  USER_DB_HOST,
+  USER_DB_NAME,
+  USER_DB_PASSWORD,
+  USER_DB_PORT,
+  USER_DB_USER,
   GAME_DB_HOST,
   GAME_DB_NAME,
   GAME_DB_PASSWORD,
@@ -14,11 +14,11 @@ import {
 
 export const config = {
   userDatabase: {
-    database: DB_NAME,
-    host: DB_HOST,
-    password: DB_PASSWORD,
-    port: DB_PORT,
-    user: DB_USER,
+    database: USER_DB_NAME,
+    host: USER_DB_HOST,
+    password: USER_DB_PASSWORD,
+    port: USER_DB_PORT,
+    user: USER_DB_USER,
   },
   gameDatabase: {
     database: GAME_DB_NAME,
