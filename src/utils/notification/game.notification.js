@@ -34,12 +34,8 @@ export const makeNotification = (packetType, data) => {
 };
 
 export const createMatchStartNotification = (user, opponent) => {
-  const initialGameStateData = {
-    baseHp: 500,
-    towerCost: 500,
-    initialGold: 10000,
-    monsterSpawnInterval: 5000,
-  };
+  const initialGameStateData = user.gameSession.initialGameState;
+
   const playerGameData = {
     gold: user.gold,
     base: user.base, // BaseData
