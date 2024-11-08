@@ -51,11 +51,12 @@ class Game {
   }
   // 대전 시작
   gameStart() {
-    const gameStartPacket = createMatchStartNotification();
+    const gameStartPacket1 = createMatchStartNotification(this.users[0], this.users[1]);
+    const gameStartPacket2 = createMatchStartNotification(this.users[1], this.users[0]);
     const user1Socket = this.users[0].socket;
     const user2Socket = this.users[1].socket;
-    user1Socket.write(gameStartPacket);
-    user2Socket.write(gameStartPacket);
+    user1Socket.write(gameStartPacket1);
+    user2Socket.write(gameStartPacket2);
     const user1 = this.users[0];
     const user2 = this.users[1];
 
