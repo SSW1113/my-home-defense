@@ -11,7 +11,7 @@ class User {
 
     // 게임 데이터
     this.gameSession;
-    this.gold = 10000;
+    this.gold = 5000;
     this.base = new Base(100);
     this.towers = [];
     this.monsters = [];
@@ -28,7 +28,7 @@ class User {
   // 게임 데이터 초기화
   initUser() {
     this.gameSession = null;
-    this.gold = 10000;
+    this.gold = 5000;
     this.base = new Base(100);
     this.towers = [];
     this.monsters = [];
@@ -136,10 +136,23 @@ class User {
     return this.base.hp;
   }
 
+  getAllState() {
+    const stateData = {
+      userGold: this.gold,
+      baseHp: this.base.hp,
+      monsterLevel: this.monsterLevel,
+      score: this.score,
+      towers: this.towers,
+      monsters: this.monsters,
+    }
+
+    const protoType = PacketType.STATE_SYNC_NOTIFICATION;
+    const packet = makeNotification(protoType, stateData);
+    this.socket.write(packet)
+  }
   getTower(towerId) {
     const tower = this.towers.find((tower) => tower.id === towerId);
     return tower;
   }
 }
-
 export default User;

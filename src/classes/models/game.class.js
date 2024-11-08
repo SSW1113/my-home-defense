@@ -107,21 +107,19 @@ class Game {
 
   // 상태동기화 (?)
   getAllState(userId) {
-    const stateData = this.users
-      .filter((user) => user.id === userId)
-      .map((user) => {
-        return {
-          userGold: user.gold,
-          baseHp: user.base.hp,
-          monsterLevel: user.monsterLevel,
-          score: user.score,
-          towers: user.towers,
-          monsters: user.monsters,
-        };
-      });
-    console.log(' id : ', userId, stateData);
+    const user = this.getUserById(userId);
+    const stateData = {
+      userGold: user.gold,
+      baseHp: user.base.hp,
+      monsterLevel: user.monsterLevel,
+      score: user.score,
+      towers: user.towers,
+      monsters: user.monsters,
+    }
+    console.log('id: ', userId, 'state: ', stateData);
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
-    return makeNotification(protoType, stateData);
+    const packet = makeNotification(protoType, stateData);
+    user.socket.write(packet)
   }
 }
 
