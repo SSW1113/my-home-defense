@@ -16,8 +16,7 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
     }
 
     // 세션 저장
-    const monster = new Monster(); // 유저에 몬스터 생성 및 정보 추가
-    user.addMonster(monster);
+    const monster = user.createMonster();
 
     const responseData = {
       monsterId: monster.id,
