@@ -1,6 +1,5 @@
 import Monster from '../../classes/models/monster.class.js';
 import { PacketType } from '../../constants/header.js';
-import { getGameSessionById } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 import { createResponse } from '../../utils/response/createRespose.js';
 
@@ -25,7 +24,11 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
       monsterNumber: monster.monsterNumber,
     };
 
-    const spawnMonsterResponse = createResponse(PacketType.SPAWN_MONSTER_RESPONSE, responseData);
+    const spawnMonsterResponse = createResponse(
+      PacketType.SPAWN_MONSTER_RESPONSE,
+      responseData,
+      socket,
+    );
 
     socket.write(spawnMonsterResponse);
 

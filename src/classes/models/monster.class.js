@@ -1,4 +1,4 @@
-let monsterCounter = 1; // 고유한 몬스터 ID 관리
+let monsterCounter = 0; // 고유한 몬스터 ID 관리
 
 class Monster {
   constructor(level) {

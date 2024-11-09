@@ -1,4 +1,4 @@
-let towerCounter = 2;
+let towerCounter = 0;
 
 class Tower {
   constructor(x, y) {

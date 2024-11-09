@@ -5,7 +5,7 @@ import { createEnemyTowerAttackNotification } from '../../utils/notification/tow
 export const towerAttackHandler = async ({ packetType, data, socket }) => {
   try {
     const { towerId, monsterId } = data;
-    console.log('towerId , monsterId', towerId, monsterId);
+    console.log('towerId , monsterId', towerId, monsterId); // 왜 가끔 0번을 주지?
 
     const currentUser = getUserBySocket(socket);
 
@@ -14,7 +14,7 @@ export const towerAttackHandler = async ({ packetType, data, socket }) => {
       // 타워가 없음
       console.log(currentUser.towers);
       console.log(tower);
-      console.error('타워를 찾을 수 없습니다.'); // 이게 뜨면 생각한게 맞는건데
+      console.error('타워를 찾을 수 없습니다.');
     }
 
     const monster = currentUser.getMonster(monsterId);

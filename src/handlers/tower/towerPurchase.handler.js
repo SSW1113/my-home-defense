@@ -30,7 +30,11 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
       towerId: towerId,
     };
 
-    const towerPurchaseResponse = createResponse(PacketType.TOWER_PURCHASE_RESPONSE, responseData);
+    const towerPurchaseResponse = createResponse(
+      PacketType.TOWER_PURCHASE_RESPONSE,
+      responseData,
+      socket,
+    );
     socket.write(towerPurchaseResponse);
 
     const otherUsers = gameSession.users.filter((user) => user.id !== currentUser.id);

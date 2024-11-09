@@ -162,7 +162,7 @@ class User {
     };
 
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
-    const packet = makeNotification(protoType, stateData);
+    const packet = makeNotification(protoType, stateData, this.socket);
     this.socket.write(packet);
   }
   getTower(towerId) {

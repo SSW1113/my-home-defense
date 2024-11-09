@@ -85,7 +85,7 @@ export const loginHandler = async ({ packetType, data, socket }) => {
       }
     }
 
-    const loginResponse = createResponse(PacketType.LOGIN_RESPONSE, responseData);
+    const loginResponse = createResponse(PacketType.LOGIN_RESPONSE, responseData, socket);
     socket.write(loginResponse);
   } catch (e) {
     console.error('Login handler error: ', e);
