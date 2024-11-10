@@ -16,8 +16,7 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
     const baseHp = user.getBaseDamage(damage);
 
     // 응답 데이터 생성
-    const userNotificationData = createUpdateBaseHPNotification(baseHp, false);
-    const opponentNotificationData = createUpdateBaseHPNotification(baseHp, true);
+    const userNotificationData = createUpdateBaseHPNotification(baseHp, false, socket);
 
     // 공격 받은 유저의 데이터 baseHp를 유저에게 전달
     socket.write(userNotificationData);
@@ -29,19 +28,21 @@ export const monsterBaseAttackHandler = async ({ packetType, data, socket }) => 
     // 적이 1명을 넘어 2명 이상이여도 작동하도록 작성
     const opponentUsers = gameSession.getOpponentUser(user.id);
     opponentUsers.forEach((user) => {
+      // 응답 데이터 생성
+      const opponentNotificationData = createUpdateBaseHPNotification(baseHp, true, user.socket);
       user.socket.write(opponentNotificationData);
     });
 
     // 게임 종료
     if (baseHp <= 0) {
       // 게임 종료 notification 전송 (패배)
-      const gameOverNotification = createGameOverNotification(false);
+      const gameOverNotification = createGameOverNotification(false, socket);
       socket.write(gameOverNotification);
 
-      // 적들에게 게임 종료 notification 생성 및 전송 (승리)
-      const opponentgameOverNotification = createGameOverNotification(true);
       const opponentUsers = gameSession.getOpponentUser(user.id);
       opponentUsers.forEach((user) => {
+        // 적들에게 게임 종료 notification 생성 및 전송 (승리)
+        const opponentgameOverNotification = createGameOverNotification(true, user.socket);
         user.socket.write(opponentgameOverNotification);
       });
       gameEnd(gameSession);
@@ -89,22 +90,22 @@ export const gameOverHandler = async ({ packetType, data, socket }) => {
 };
 
 // BaseHp Notification 생성
-export const createUpdateBaseHPNotification = (baseHp, isOpponent) => {
+export const createUpdateBaseHPNotification = (baseHp, isOpponent, socket) => {
   const baseHpNotificationData = {
     isOpponent,
     baseHp,
   };
   const protoType = PacketType.UPDATE_BASE_HP_NOTIFICATION;
 
-  return makeNotification(protoType, baseHpNotificationData);
+  return makeNotification(protoType, baseHpNotificationData, socket);
 };
 
 // gameover notification 생성
-export const createGameOverNotification = (isWin) => {
+export const createGameOverNotification = (isWin, socket) => {
   const gameOverNotificationData = {
     isWin,
   };
   const protoType = PacketType.GAME_OVER_NOTIFICATION;
 
-  return makeNotification(protoType, gameOverNotificationData);
+  return makeNotification(protoType, gameOverNotificationData, socket);
 };

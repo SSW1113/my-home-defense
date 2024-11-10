@@ -1,4 +1,3 @@
-import { getGameSessionById } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 
 export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) => {
@@ -10,7 +9,7 @@ export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) =>
       throw new Error('해당 유저가 존재하지 않습니다.');
     }
 
-    const gameSession = getGameSessionById(user.getGameSession().id); // 게임 세션 조회
+    const gameSession = user.getGameSession(); // 게임 세션 조회
     if (!gameSession) {
       throw new Error('해당 게임 세션이 존재하지 않습니다.');
     }
@@ -28,13 +27,12 @@ export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) =>
     user.score += 100;
     user.gold += 100;
 
-    // 이제 다른 유저에게 나의 몬스터상황 알려주기 // 이게 맞기를
+    // 이제 다른 유저에게 나의 몬스터상황 알려주기
     gameSession.notifyEnemyMonsterDeath(user.id, monsterId);
 
     //user.getAllState();
     gameSession.getAllState(user.id);
   } catch (e) {
     console.error(e);
-    // handlerError(socket, e);
   }
 };

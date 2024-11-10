@@ -1,6 +1,7 @@
 import { PacketType } from '../../constants/header.js';
 import { initialGameStateData } from '../../init/index.js';
 import { getProtoMessages } from '../../init/loadProto.js';
+import { getClientBySocket } from '../../sessions/client.session.js';
 import { createHeader } from '../response/createHeader.js';
 import { notificationProto } from './notificationPoroto.js';
 
@@ -9,7 +10,7 @@ import { notificationProto } from './notificationPoroto.js';
  * @param {*} data 페이로드
  * @returns
  */
-export const makeNotification = (packetType, data) => {
+export const makeNotification = (packetType, data, socket) => {
   try {
     const protoMessages = getProtoMessages();
     const gamePacket = protoMessages['protoPacket']['GamePacket'];
@@ -23,7 +24,15 @@ export const makeNotification = (packetType, data) => {
     const gamePacketFieldName = notificationProto[packetType].fieldName;
     const gamePacketInstance = gamePacket.create({ [gamePacketFieldName]: notificationInstance });
 
-    const sequence = 0;
+    const client = getClientBySocket(socket);
+    let sequence;
+    // 아 이게 강제로 나갔을때 에러가 나네
+    if (client) {
+      sequence = client.getSequence();
+    } else {
+      sequence = 0;
+    }
+
     const buffer = gamePacket.encode(gamePacketInstance).finish();
 
     const headerPacket = createHeader(packetType, sequence, buffer.length);
@@ -34,7 +43,7 @@ export const makeNotification = (packetType, data) => {
   }
 };
 
-export const createMatchStartNotification = (user, opponent) => {
+export const createMatchStartNotification = (user, opponent, socket) => {
 
   const playerGameData = {
     gold: user.gold,
@@ -68,5 +77,5 @@ export const createMatchStartNotification = (user, opponent) => {
 
   const protoType = PacketType.MATCH_START_NOTIFICATION;
 
-  return makeNotification(protoType, notifiData);
+  return makeNotification(protoType, notifiData, socket);
 };
