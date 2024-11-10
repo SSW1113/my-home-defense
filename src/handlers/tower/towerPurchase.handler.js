@@ -17,12 +17,12 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
     const tower = currentUser.createTower(x, y); // 타워 추가
     const towerId = tower.id;
 
-    currentUser.gold -= 3000;
-
     console.log('타워 구매됨 tower: ', tower);
 
-    // 돈 검증
     const gameSession = getGameSessionById(currentUser.getGameSession().id);
+    // 골드 차감 동기화    
+    currentUser.gold -= 3000;
+    gameSession.getAllState(currentUser.id);
 
     const responseData = {
       towerId: towerId,
