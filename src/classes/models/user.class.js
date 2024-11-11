@@ -33,7 +33,7 @@ class User {
   // 게임 데이터 초기화
   initUser() {
     this.gameSession = null;
-    this.gold = 0;
+    this.gold = initialGameStateData.initialGold;
     this.base = new Base(initialGameStateData.baseHp);
     this.towers = [];
     this.monsters = [];
