@@ -25,12 +25,12 @@ export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) =>
     user.removeMonster(monsterId);
 
     user.score += 100;
-    user.gold += 100;
+    user.gold += 500;
 
     // 이제 다른 유저에게 나의 몬스터상황 알려주기
     gameSession.notifyEnemyMonsterDeath(user.id, monsterId);
 
-    //user.getAllState();
+    //user.getAllState(id); 골드, 점수 등 상태동기화
     gameSession.getAllState(user.id);
   } catch (e) {
     console.error(e);

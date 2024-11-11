@@ -8,18 +8,6 @@ class Game {
   constructor(id) {
     this.id = id;
     this.users = [];
-
-    this.initialGameState = this.initState();
-  }
-
-  initState() {
-    const initialGameStateData = {
-      baseHp: 500,
-      towerCost: 500,
-      initialGold: 6000,
-      monsterSpawnInterval: 4000,
-    };
-    return initialGameStateData;
   }
 
   addUser(user) {
@@ -110,6 +98,7 @@ class Game {
   // 상태동기화
   getAllState(userId) {
     const user = this.getUserById(userId);
+    // 동기화 데이터
     const stateData = {
       userGold: user.gold,
       baseHp: user.base.hp,
@@ -119,6 +108,7 @@ class Game {
       monsters: user.monsters,
     };
     //console.log('id: ', userId, 'state: ', stateData);
+    // 해당 유저의 소켓으로 보내기
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
     const packet = makeNotification(protoType, stateData, user.socket);
     user.socket.write(packet);

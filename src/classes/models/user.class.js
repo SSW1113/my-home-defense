@@ -1,3 +1,4 @@
+import { initialGameStateData } from '../../init/index.js';
 import Base from './base.class.js';
 import Monster from './monster.class.js';
 import Tower from './tower.class.js';
@@ -15,8 +16,8 @@ class User {
 
     // 게임 데이터
     this.gameSession;
-    this.gold = 5000;
-    this.base = new Base(100);
+    this.gold = initialGameStateData.initialGold;
+    this.base = new Base(initialGameStateData.baseHp);
     this.towers = [];
     this.monsters = [];
     this.monsterLevel = 1;
@@ -32,8 +33,8 @@ class User {
   // 게임 데이터 초기화
   initUser() {
     this.gameSession = null;
-    this.gold = 100000;
-    this.base = new Base(100);
+    this.gold = initialGameStateData.initialGold;
+    this.base = new Base(initialGameStateData.baseHp);
     this.towers = [];
     this.monsters = [];
     this.monsterLevel = 1;
