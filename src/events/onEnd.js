@@ -1,4 +1,5 @@
 import { createGameOverNotification, gameEnd } from '../handlers/game/monster.baseattack.js';
+import { removeClient } from '../sessions/client.session.js';
 import { getUserBySocket, removeUser } from '../sessions/user.session.js';
 
 export const onEnd = (socket) => () => {
@@ -18,6 +19,7 @@ export const onEnd = (socket) => () => {
     }
 
     removeUser(socket);
+    removeClient(socket);
   } catch (err) {
     console.error('onEnd error: ', err);
   }

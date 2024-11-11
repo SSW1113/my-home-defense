@@ -1,4 +1,4 @@
-let towerCounter = 2;
+let towerCounter = 0;
 
 class Tower {
   constructor(x, y) {
@@ -13,13 +13,3 @@ class Tower {
 }
 
 export default Tower;
-
-// class Tower {
-//   constructor(towerId, x, y) {
-//     this.id = towerId;
-//     this.x = x;
-//     this.y = y;
-//   }
-// }
-
-// export default Tower;

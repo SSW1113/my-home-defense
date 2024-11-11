@@ -1,4 +1,3 @@
-import { getGameSessionById } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 
 export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) => {
@@ -28,13 +27,12 @@ export const monsterDeathNotifyHandler = async ({ packetType, data, socket }) =>
     user.score += 100;
     user.gold += 100;
 
-    // 이제 다른 유저에게 나의 몬스터상황 알려주기 // 이게 맞기를
+    // 이제 다른 유저에게 나의 몬스터상황 알려주기
     gameSession.notifyEnemyMonsterDeath(user.id, monsterId);
 
     //user.getAllState();
     gameSession.getAllState(user.id);
   } catch (e) {
     console.error(e);
-    // handlerError(socket, e);
   }
 };

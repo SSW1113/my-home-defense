@@ -57,8 +57,9 @@ class User {
     return ++this.sequence;
   }
 
-  creatTower(x, y) {
-    const tower = new Tower(this.towerIdCounter++, x, y);
+  createTower(x, y) {
+    const tower = new Tower(x, y);
+    this.towers.push(tower);
     return tower;
   }
 
@@ -114,8 +115,9 @@ class User {
   }
 
   // 몬스터 정보 id 부여 후 저장
-  creatMonster(level = null) {
-    const monster = new Monster(this.monsterIdCounter++, level);
+  createMonster(level = null) {
+    const monster = new Monster(level);
+    this.monsters.push(monster);
     return monster;
   }
 
@@ -162,7 +164,7 @@ class User {
     };
 
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
-    const packet = makeNotification(protoType, stateData);
+    const packet = makeNotification(protoType, stateData, this.socket);
     this.socket.write(packet);
   }
   getTower(towerId) {
