@@ -44,10 +44,20 @@ class Game {
   }
   // 대전 시작
   gameStart() {
-    const gameStartPacket1 = createMatchStartNotification(this.users[0], this.users[1]);
-    const gameStartPacket2 = createMatchStartNotification(this.users[1], this.users[0]);
     const user1Socket = this.users[0].socket;
     const user2Socket = this.users[1].socket;
+
+    const gameStartPacket1 = createMatchStartNotification(
+      this.users[0],
+      this.users[1],
+      user1Socket,
+    );
+    const gameStartPacket2 = createMatchStartNotification(
+      this.users[1],
+      this.users[0],
+      user2Socket,
+    );
+
     user1Socket.write(gameStartPacket1);
     user2Socket.write(gameStartPacket2);
   }
@@ -58,29 +68,37 @@ class Game {
       monsterId: monster.id,
       monsterNumber: monster.monsterNumber,
     };
-    const notification = makeNotification(PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION, monsterData);
 
     this.users
       .filter((user) => user.id !== userId)
       .forEach((otherUser) => {
+        const notification = makeNotification(
+          PacketType.SPAWN_ENEMY_MONSTER_NOTIFICATION,
+          monsterData,
+          otherUser.socket,
+        );
         otherUser.socket.write(notification); // 다른 유저에게 새 몬스터 정보 알림 // 제발
       });
   }
 
   // 이거는 자기 몬스터 상황을 다른 유저들에게 알리는 함수
   notifyEnemyMonsterDeath(userId, monsterId) {
-    const notification = makeNotification(PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION, {
-      monsterId,
-    });
-
     this.users
       .filter((user) => user.id !== userId)
-      .forEach((otherUser) => otherUser.socket.write(notification)); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
+      .forEach((otherUser) => {
+        const notification = makeNotification(
+          PacketType.ENEMY_MONSTER_DEATH_NOTIFICATION,
+          { monsterId },
+          otherUser.socket,
+        );
+        otherUser.socket.write(notification);
+      }); // 여기서 다른 유저들(다른 클라이언트)에게 상황을 전달
   }
 
   // 상태동기화
   getAllState(userId) {
     const user = this.getUserById(userId);
+    // 동기화 데이터
     const stateData = {
       userGold: user.gold,
       baseHp: user.base.hp,
@@ -90,8 +108,9 @@ class Game {
       monsters: user.monsters,
     };
     //console.log('id: ', userId, 'state: ', stateData);
+    // 해당 유저의 소켓으로 보내기
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
-    const packet = makeNotification(protoType, stateData);
+    const packet = makeNotification(protoType, stateData, user.socket);
     user.socket.write(packet);
   }
 }

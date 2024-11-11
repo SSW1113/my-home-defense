@@ -50,7 +50,7 @@ export const registerHandler = async ({ packetType, data, socket }) => {
       };
     }
 
-    const registerResponse = createResponse(PacketType.REGISTER_RESPONSE, responseData);
+    const registerResponse = createResponse(PacketType.REGISTER_RESPONSE, responseData, socket);
 
     socket.write(registerResponse);
     console.log('register complete');
@@ -62,6 +62,6 @@ export const registerHandler = async ({ packetType, data, socket }) => {
       message: '회원가입 처리 중 예상치 못한 오류가 발생했습니다.',
       failCode: config.globalFailCode.UNKNOWN_ERROR,
     };
-    socket.write(createResponse(PacketType.REGISTER_RESPONSE, errorResponse));
+    socket.write(createResponse(PacketType.REGISTER_RESPONSE, errorResponse, socket));
   }
 };

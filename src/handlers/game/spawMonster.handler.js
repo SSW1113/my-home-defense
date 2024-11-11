@@ -1,6 +1,5 @@
 import Monster from '../../classes/models/monster.class.js';
 import { PacketType } from '../../constants/header.js';
-import { getGameSessionById } from '../../sessions/game.session.js';
 import { getUserBySocket } from '../../sessions/user.session.js';
 import { createResponse } from '../../utils/response/createRespose.js';
 
@@ -11,21 +10,24 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
       throw new Error('해당 유저가 존재하지 않습니다.');
     }
 
-    const gameSession = getGameSessionById(user.getGameSession().id); // 게임 세션 조회
+    const gameSession = user.getGameSession(); // 게임 세션 조회
     if (!gameSession) {
       throw new Error('해당 게임 세션이 존재하지 않습니다.');
     }
 
     // 세션 저장
-    const monster = new Monster(); // 유저에 몬스터 생성 및 정보 추가
-    user.addMonster(monster);
+    const monster = user.createMonster();
 
     const responseData = {
       monsterId: monster.id,
       monsterNumber: monster.monsterNumber,
     };
 
-    const spawnMonsterResponse = createResponse(PacketType.SPAWN_MONSTER_RESPONSE, responseData);
+    const spawnMonsterResponse = createResponse(
+      PacketType.SPAWN_MONSTER_RESPONSE,
+      responseData,
+      socket,
+    );
 
     socket.write(spawnMonsterResponse);
 

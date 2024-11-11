@@ -13,9 +13,14 @@ export const initServer = async () => {
   }
 };
 
+// initialGameStateData
+// int32 baseHp = 1;
+// int32 towerCost = 2;
+// int32 initialGold = 3;
+// int32 monsterSpawnInterval = 4;
 export const initialGameStateData = {
-  baseHp: 150,
+  baseHp: 120,
   towerCost: 3000,
-  initialGold: 9000,
+  initialGold: 15000,
   monsterSpawnInterval: 1,
 }

@@ -14,21 +14,25 @@ export const towerPurchaseHandler = async ({ data, socket }) => {
       throw Error(); // 유저가 존재하지 않음
     }
 
-    const tower = new Tower(x, y);
+    const tower = currentUser.createTower(x, y); // 타워 추가
     const towerId = tower.id;
 
     console.log('타워 구매됨 tower: ', tower);
 
-    currentUser.addTower(tower); // 타워 추가
-
-    // 돈 검증
     const gameSession = getGameSessionById(currentUser.getGameSession().id);
+    // 골드 차감 동기화    
+    currentUser.gold -= 3000;
+    gameSession.getAllState(currentUser.id);
 
     const responseData = {
       towerId: towerId,
     };
 
-    const towerPurchaseResponse = createResponse(PacketType.TOWER_PURCHASE_RESPONSE, responseData);
+    const towerPurchaseResponse = createResponse(
+      PacketType.TOWER_PURCHASE_RESPONSE,
+      responseData,
+      socket,
+    );
     socket.write(towerPurchaseResponse);
 
     const otherUsers = gameSession.users.filter((user) => user.id !== currentUser.id);

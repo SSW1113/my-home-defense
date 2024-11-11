@@ -6,11 +6,14 @@ import {
   PAYLOAD_LENGTH,
 } from '../constants/header.js';
 import { getHandlerById } from '../handlers/index.js';
+import { getClientBySocket } from '../sessions/client.session.js';
 import { packetParser } from '../utils/parser/packetParser.js';
 
 export const onData = (socket) => async (data) => {
   try {
     socket.buffer = Buffer.concat([socket.buffer, data]);
+    const client = getClientBySocket(socket);
+    client.updateSequence(); // 시퀀스 업데이트
 
     while (socket.buffer.length >= PACKET_TYPE_LENGTH + VERSION_LENGTH) {
       // 패킷 타입 읽어오기
@@ -38,7 +41,10 @@ export const onData = (socket) => async (data) => {
       const sequence = socket.buffer.readUInt32BE(
         PACKET_TYPE_LENGTH + VERSION_LENGTH + versionLength,
       );
-      // 시퀀스 체크 TODO
+      // 시퀀스 체크
+      if (sequence !== client.getSequence()) {
+        throw new Error('시퀀스가 일치하지 않습니다.');
+      }
 
       // 페이로드 길이
       const payloadLength = socket.buffer.readUInt32BE(
