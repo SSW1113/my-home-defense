@@ -107,7 +107,6 @@ class Game {
       towers: user.towers,
       monsters: user.monsters,
     };
-    //console.log('id: ', userId, 'state: ', stateData);
     // 해당 유저의 소켓으로 보내기
     const protoType = PacketType.STATE_SYNC_NOTIFICATION;
     const packet = makeNotification(protoType, stateData, user.socket);

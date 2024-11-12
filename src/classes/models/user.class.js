@@ -9,8 +9,6 @@ class User {
     this.id = id;
     this.sequence = 0;
     this.gameSession;
-    this.monsterIdCounter = 1; // 몬스터 id
-    this.towerIdCounter = 3;
 
     this.isWin = false;
 

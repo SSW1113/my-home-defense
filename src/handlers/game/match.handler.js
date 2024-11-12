@@ -1,5 +1,4 @@
 import { addGameSession, findMatchingGameSession } from '../../sessions/game.session.js';
-import CustomError from '../../utils/error/customError.js';
 import { v4 as uuidv4 } from 'uuid';
 import { getUserBySocket } from '../../sessions/user.session.js';
 
