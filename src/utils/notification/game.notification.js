@@ -26,13 +26,11 @@ export const makeNotification = (packetType, data, socket) => {
 
     const client = getClientBySocket(socket);
     let sequence;
-    // 아 이게 강제로 나갔을때 에러가 나네
     if (client) {
       sequence = client.getSequence();
     } else {
       sequence = 0;
     }
-
     const buffer = gamePacket.encode(gamePacketInstance).finish();
 
     const headerPacket = createHeader(packetType, sequence, buffer.length);
