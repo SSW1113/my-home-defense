@@ -42,7 +42,7 @@ my-home-defense
    │  │  ├─ match.handler.js
    │  │  ├─ monster.baseattack.js
    │  │  ├─ monsterDeath.handler.js
-   │  │  └─ spawMonster.handler.js
+   │  │  └─ spawnMonster.handler.js
    │  ├─ index.js
    │  ├─ tower
    │  │  ├─ towerAttack.handler.js
