@@ -7,12 +7,12 @@ export const spawnMonsterHandler = async ({ packetType, data, socket }) => {
   try {
     const user = getUserBySocket(socket); // 게임세션에 참여한 user찾기
     if (!user) {
-      throw new Error('해당 유저가 존재하지 않습니다.');
+      console.error('해당 유저가 존재하지 않습니다.');
     }
 
     const gameSession = user.getGameSession(); // 게임 세션 조회
     if (!gameSession) {
-      throw new Error('해당 게임 세션이 존재하지 않습니다.');
+      console.error('해당 게임 세션이 존재하지 않습니다.');
     }
 
     // 세션 저장

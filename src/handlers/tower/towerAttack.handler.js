@@ -12,16 +12,12 @@ export const towerAttackHandler = async ({ packetType, data, socket }) => {
     const tower = currentUser.getTower(towerId);
     if (!tower) {
       // 타워가 없음
-      console.log(currentUser.towers);
-      console.log(tower);
       console.error('타워를 찾을 수 없습니다.');
     }
 
     const monster = currentUser.getMonster(monsterId);
     if (!monster) {
       // 몬스터가 없음
-      console.log(currentUser.monsters);
-      console.log(monster);
       console.error('몬스터를 찾을 수 없습니다.');
     }
 
