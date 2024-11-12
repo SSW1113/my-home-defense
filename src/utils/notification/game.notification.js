@@ -3,7 +3,7 @@ import { initialGameStateData } from '../../init/index.js';
 import { getProtoMessages } from '../../init/loadProto.js';
 import { getClientBySocket } from '../../sessions/client.session.js';
 import { createHeader } from '../response/createHeader.js';
-import { notificationProto } from './notificationPoroto.js';
+import { notificationProto } from './notificationProto.js';
 
 /**
  * @param {*} packetType 패킷 타입
@@ -44,7 +44,6 @@ export const makeNotification = (packetType, data, socket) => {
 };
 
 export const createMatchStartNotification = (user, opponent, socket) => {
-
   const playerGameData = {
     gold: user.gold,
     base: user.base, // BaseData

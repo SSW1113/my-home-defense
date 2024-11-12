@@ -4,7 +4,7 @@ import { loginHandler } from './user/login.handler.js';
 import { towerPurchaseHandler } from './tower/towerPurchase.handler.js';
 import { matchStartHandler } from './game/match.handler.js';
 import { gameOverHandler, monsterBaseAttackHandler } from './game/monster.baseattack.js';
-import { spawnMonsterHandler } from './game/spawMonster.handler.js';
+import { spawnMonsterHandler } from './game/spawnMonster.handler.js';
 import { monsterDeathNotifyHandler } from './game/monsterDeath.handler.js';
 import { towerAttackHandler } from './tower/towerAttack.handler.js';
 
